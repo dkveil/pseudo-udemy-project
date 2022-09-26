@@ -3,6 +3,7 @@ import GlobalStyles from '../styles/global'
 import { muiTheme }from '../styles/muiTheme'
 import { theme } from '../styles/theme'
 import { ThemeProvider } from 'styled-components'
+import StoreProvider from '../context/StoreProvider'
 
 interface IMainTemplateProps {
     children: React.ReactNode
@@ -11,14 +12,16 @@ interface IMainTemplateProps {
 const MainTemplate = ({children}: IMainTemplateProps ) => {
     return (
         <>
-            <GlobalStyles />
-            <ThemeProvider theme={theme}>
-                <ThemeProvider theme={muiTheme}>
-                <main>
-                    {children}
-                </main>
+            <StoreProvider>
+                <GlobalStyles />
+                <ThemeProvider theme={theme}>
+                    <ThemeProvider theme={muiTheme}>
+                    <main>
+                        {children}
+                    </main>
+                    </ThemeProvider>
                 </ThemeProvider>
-            </ThemeProvider>
+            </StoreProvider>
         </>
     );
 }

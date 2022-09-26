@@ -1,4 +1,5 @@
 import React from 'react'
+import request from './../helpers/request';
 
 interface IStoreContext {
     // user: boolean | null
@@ -15,16 +16,26 @@ const StoreProvider = ({children}: IStoreProvider) => {
     const [user, setUser] = React.useState(null)
 
     const fetchData = async () => {
+        const { data } = await request.get('./courses');
 
+        setCourses(data.courses)
     }
 
     React.useEffect(() => {
         fetchData()
+
     }, [])
 
     return (
-        <StoreContext.Provider value={{}}>
+        <StoreContext.Provider value={{
+            courses,
+            setCourses,
+            user,
+            setUser
+        }}>
             {children}
         </StoreContext.Provider>
     )
 }
+
+export default StoreProvider;
