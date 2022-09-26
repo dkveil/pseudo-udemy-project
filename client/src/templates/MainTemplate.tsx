@@ -1,9 +1,9 @@
 import React from 'react';
 import GlobalStyles from '../styles/global'
-import { muiTheme }from '../styles/muiTheme'
-import { theme } from '../styles/theme'
+import { theme } from '../styles/muiTheme'
 import { ThemeProvider } from 'styled-components'
 import StoreProvider from '../context/StoreProvider'
+import Header from './../components/Header/Header';
 
 interface IMainTemplateProps {
     children: React.ReactNode
@@ -15,11 +15,10 @@ const MainTemplate = ({children}: IMainTemplateProps ) => {
             <StoreProvider>
                 <GlobalStyles />
                 <ThemeProvider theme={theme}>
-                    <ThemeProvider theme={muiTheme}>
+                    <Header />
                     <main>
                         {children}
                     </main>
-                    </ThemeProvider>
                 </ThemeProvider>
             </StoreProvider>
         </>

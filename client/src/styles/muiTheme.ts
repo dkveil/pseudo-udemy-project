@@ -1,5 +1,20 @@
 import { createTheme } from '@mui/material';
+import { size } from '../utils/media';
 
-export const muiTheme = createTheme({
-
+export const theme = createTheme({
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+            mobile: 0,
+            tablet: size.TABLET,
+            desktop: size.DESKTOP,
+            large: size.LARGE
+        },
+        unit: 'px'
+    }
 })
+
