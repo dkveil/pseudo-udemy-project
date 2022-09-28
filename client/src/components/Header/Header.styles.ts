@@ -16,16 +16,18 @@ export const Toolbar = styled(MuiToolbar)`
 
 export const Search = styled('div')(({theme}) =>`
     position: relative;
-    border-radius: 10px;
+    border-radius: 20px;
+    border: 1px solid black;
     margin-right: ${theme.spacing(2)};
     display: flex;
     align-items: center;
     flex-direction: row;
-    background-color: rgba(115,115,115,.2);
+    background-color: rgba(115,115,115,.05);
     flex-grow: 1;
+    height: 45px;
 
     :hover{
-        background-color: rgba(115,115,115,.3);
+        background-color: rgba(115,115,115,.1);
     }
 
     ${theme.breakpoints.up("sm")} {

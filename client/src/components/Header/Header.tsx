@@ -2,12 +2,13 @@ import React from 'react'
 import { Container, Typography, IconButton, Box, Avatar, Tooltip } from '@mui/material'
 import { useStoreContext } from '../../context/StoreProvider';
 import { AppBar, Toolbar, Search, StyledInputBase, SearchIconWrapper } from './Header.styles';
-import AddToHomeScreenIcon from '@mui/icons-material/AddToHomeScreen';
 import SearchIcon from '@mui/icons-material/Search';
 import TestAvatar from '../../assets/images/avatar.jpg'
-import Button from '@mui/material/Button';
+import Button from '../Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from '@mui/material/Badge'
 
 const Header = () => {
 
@@ -25,18 +26,8 @@ const Header = () => {
 
     return (
         <AppBar position='static'>
-            <Container maxWidth="lg" sx={{height: 'inherit'}}>
+            <Container maxWidth="xl" sx={{height: 'inherit'}}>
                 <Toolbar disableGutters>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        sx={{
-                            mr: {xs: 1, md: 0},
-                            color: "black"
-                        }}
-                    >
-                        <AddToHomeScreenIcon />
-                    </IconButton>
                     <Typography
                         variant="h6"
                         noWrap
@@ -58,7 +49,7 @@ const Header = () => {
                     >
                         fakeUdemy
                     </Typography>
-                    <Search>
+                    <Search sx={{flexGrow: 1}}>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
@@ -67,9 +58,10 @@ const Header = () => {
                         inputProps={{ 'aria-label': 'search'}}
                         />
                     </Search>
-                    <Box sx={{ flexGrow: 1}}/>
-                    <Box sx={{flexGrow: 0}}>
-                        {user ? (
+                    <Box sx={{flexGrow: 1}} />
+                    <Box sx={{minWidth: '300px', display: 'flex', justifyContent: 'flex-end'}}>
+
+                        {Boolean(user) ? (
                             <>
                                 <Tooltip title="Open settings">
                                     <IconButton sx={{padding: 0}} onClick={handleOpenUserMenu}>
@@ -98,8 +90,17 @@ const Header = () => {
                                 </Menu>
                             </>
                         ) : (
-                            <Button sx={{color: 'black'}}>Login</Button>
+                            <>
+                                <Badge badgeContent={2}>
+                                    <IconButton sx={{padding: 0}}>
+                                        <ShoppingCartIcon sx={{color: 'black'}}/>
+                                    </IconButton>
+                                </Badge>
+                                <Button variant="outlined" sx={{ml: 2}}>Login</Button>
+                                <Button variant="contained" sx={{ml: 2}}>Register</Button>
+                            </>
                         )}
+
                     </Box>
                 </Toolbar>
             </Container>
