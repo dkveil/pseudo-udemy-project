@@ -16,7 +16,7 @@ interface IStoreProvider { children: React.ReactNode }
 
 const StoreProvider = ({children}: IStoreProvider) => {
     const [courses, setCourses] = React.useState([])
-    const [user, setUser] = React.useState(true)
+    const [user, setUser] = React.useState(null)
 
     const fetchData = async () => {
         const { data } = await request.get('./courses');
