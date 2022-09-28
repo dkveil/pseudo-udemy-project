@@ -26,7 +26,6 @@ const StoreProvider = ({children}: IStoreProvider) => {
 
     React.useEffect(() => {
         fetchData()
-
     }, [])
 
     return (

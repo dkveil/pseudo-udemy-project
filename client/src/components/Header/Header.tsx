@@ -8,12 +8,17 @@ import Button from '../Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Badge from '@mui/material/Badge'
+import Badge from '../Badge'
 import useWindowDimensions from './../../hooks/useWindowDimensions.hook';
 import { size } from '../../utils/media';
 import MenuIcon from '@mui/icons-material/Menu';
+import Modal from '../Modal';
 
 const Header = () => {
+
+    const [openModal, setOpenModal] = React.useState(true);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
 
     const { user } = useStoreContext()
     const { width: windowWidth } = useWindowDimensions()
@@ -22,7 +27,6 @@ const Header = () => {
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
@@ -105,9 +109,6 @@ const Header = () => {
         </>
     )
 
-
-
-
     const mobileToolbar = (
         <>
             <Box sx={{flexGrow: 1}}>
@@ -178,13 +179,16 @@ const Header = () => {
     )
 
     return (
-        <AppBar position='static'>
-            <Container maxWidth="xl" sx={{height: 'inherit'}}>
-                <Toolbar disableGutters>
-                    {windowWidth >= size.DESKTOP ? desktopToolbar : mobileToolbar}
-                </Toolbar>
-            </Container>
-        </AppBar>
+        <>
+            <AppBar position='static'>
+                <Container maxWidth="xl" sx={{height: 'inherit'}}>
+                    <Toolbar disableGutters>
+                        {windowWidth > size.DESKTOP ? desktopToolbar : mobileToolbar}
+                    </Toolbar>
+                </Container>
+            </AppBar>
+
+        </>
     );
 }
 
