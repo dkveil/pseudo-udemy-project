@@ -84,7 +84,7 @@ exports.addUser = (request, response, next) => {
 
     usersData.push(newUser)
 
-    response.status(200).json({
+    response.status(201).json({
       user: newUser
     })
   }

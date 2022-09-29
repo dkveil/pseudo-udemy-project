@@ -47,7 +47,7 @@ const registerValidationSchema= Yup.object({
 const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
 
     const { setUser } = useStoreContext()
-    const [validateMessage, setValidateMessage ] = React.useState<string | null>('')
+    const [validateMessage, setValidateMessage ] = React.useState<string | null>(null)
 
     const initValues = {
         login: '',
@@ -57,7 +57,7 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
 
     if(type && open){
         return (
-            <Modal open={open} handleClose={handleClose}>
+            <Modal open={open} handleClose={() => {setValidateMessage(null); handleClose()}}>
                 <Formik<FormModel>
                     initialValues={initValues}
                     validationSchema={type === "login" ? loginValidationSchema : registerValidationSchema}
@@ -160,14 +160,14 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                             sx={{
                                                 mt: 10,
                                                 fontSize: '14px',
-                                                ['b']: {
+                                                b: {
                                                     fontWeight: 'bold',
                                                     color: '#a435f0',
                                                     cursor: 'pointer'
                                                 }
                                             }}
                                         >
-                                            Don't have account yet? <b onClick={() => {return resetForm(), setValidateMessage(null),handleFormType('register')}}>Register now.</b>
+                                            Don't have account yet? <b onClick={() => { resetForm(); setValidateMessage(null); handleFormType('register')}}>Register now.</b>
                                         </Typography>
                                     </Box>
                                 </>
@@ -231,14 +231,14 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                             sx={{
                                                 mt: 10,
                                                 fontSize: '14px',
-                                                ['b']: {
+                                                b: {
                                                     fontWeight: 'bold',
                                                     color: '#a435f0',
                                                     cursor: 'pointer'
                                                 }
                                             }}
                                         >
-                                            Have you already created an account? <b onClick={() =>{ return resetForm(), setValidateMessage(null), handleFormType('login')}}>Login now.</b>
+                                            Have you already created an account? <b onClick={() =>{ resetForm(); setValidateMessage(null); handleFormType('login')}}>Login now.</b>
                                         </Typography>
                                     </Box>
                                 </>

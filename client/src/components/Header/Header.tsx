@@ -99,7 +99,7 @@ const Header = () => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                     >
-                        <MenuItem onClick={() => { return setUser(null), handleCloseUserMenu()}}>
+                        <MenuItem onClick={() => { setUser(null); handleCloseUserMenu()}}>
                             <Typography textAlign="center">Log out</Typography>
                         </MenuItem>
                     </Menu>
@@ -125,37 +125,53 @@ const Header = () => {
                 <IconButton size="medium" onClick={handleOpenUserMenu}>
                     <MenuIcon sx={{color: 'black'}}/>
                 </IconButton>
-                <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                >
                     {Boolean(user) ? (
-                        <MenuItem onClick={() => { return setUser(null), handleCloseUserMenu()}}>
-                            <Typography textAlign="center">Log out</Typography>
-                        </MenuItem>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            <MenuItem onClick={() => { setUser(null); handleCloseUserMenu()}}>
+                                <Typography textAlign="center">Log out</Typography>
+                            </MenuItem>
+                        </Menu>
                     ) : (
-                        <>
-                            <MenuItem onClick={() => { return handleOpenModal('login'), handleCloseUserMenu()}}>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            <MenuItem onClick={() => { handleOpenModal('login'); handleCloseUserMenu()}}>
                                 <Typography textAlign="center">Log in</Typography>
                             </MenuItem>
-                            <MenuItem onClick={() => { return handleOpenModal('register'), handleCloseUserMenu()}}>
+                            <MenuItem onClick={() => { handleOpenModal('register'); handleCloseUserMenu()}}>
                                 <Typography textAlign="center">Register</Typography>
                             </MenuItem>
-                        </>
+                        </Menu>
                     )}
-                </Menu>
+
             </Box>
             <Typography
             variant="h6"
