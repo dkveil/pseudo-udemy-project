@@ -19,7 +19,7 @@ const StoreProvider = ({children}: IStoreProvider) => {
     const [user, setUser] = React.useState(null)
 
     const fetchData = async () => {
-        const { data } = await request.get('./courses');
+        const { data } = await request.get('/courses');
 
         setCourses(data.courses)
     }

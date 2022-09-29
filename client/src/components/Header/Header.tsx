@@ -12,15 +12,25 @@ import Badge from '../Badge'
 import useWindowDimensions from './../../hooks/useWindowDimensions.hook';
 import { size } from '../../utils/media';
 import MenuIcon from '@mui/icons-material/Menu';
-import Modal from '../Modal';
+import UserForm from '../UserForm';
 
 const Header = () => {
 
-    const [openModal, setOpenModal] = React.useState(true);
-    const handleOpenModal = () => setOpenModal(true);
-    const handleCloseModal = () => setOpenModal(false);
+    const [openModal, setOpenModal] = React.useState<boolean>(true);
+    const [userFormType, setUserFormType] = React.useState<"register" | "login" | null>(null)
 
-    const { user } = useStoreContext()
+    const handleOpenModal = (type: typeof userFormType) => {
+        setUserFormType(type)
+        setOpenModal(true)
+    };
+
+    const handleFormType = (type: typeof userFormType) => {
+        setUserFormType(type)
+    }
+
+    const handleCloseModal = () => setOpenModal(false)
+
+    const { user, setUser } = useStoreContext()
     const { width: windowWidth } = useWindowDimensions()
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -89,7 +99,7 @@ const Header = () => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                     >
-                        <MenuItem onClick={handleCloseUserMenu}>
+                        <MenuItem onClick={() => { return setUser(null), handleCloseUserMenu()}}>
                             <Typography textAlign="center">Log out</Typography>
                         </MenuItem>
                     </Menu>
@@ -101,8 +111,8 @@ const Header = () => {
                             <ShoppingCartIcon sx={{color: 'black'}}/>
                         </IconButton>
                     </Badge>
-                    <Button variant="outlined" sx={{ml: 2}}>Login</Button>
-                    <Button variant="contained">Register</Button>
+                    <Button variant="outlined" sx={{ml: 2}} onClick={() => handleOpenModal('login')}>Login</Button>
+                    <Button variant="contained" onClick={() => handleOpenModal('register')}>Register</Button>
                 </>
             )}
             </Box>
@@ -137,10 +147,10 @@ const Header = () => {
                         </MenuItem>
                     ) : (
                         <>
-                            <MenuItem onClick={handleCloseUserMenu}>
+                            <MenuItem onClick={() => { return handleOpenModal('login'), handleCloseUserMenu()}}>
                                 <Typography textAlign="center">Log in</Typography>
                             </MenuItem>
-                            <MenuItem onClick={handleCloseUserMenu}>
+                            <MenuItem onClick={() => { return handleOpenModal('register'), handleCloseUserMenu()}}>
                                 <Typography textAlign="center">Register</Typography>
                             </MenuItem>
                         </>
@@ -187,7 +197,7 @@ const Header = () => {
                     </Toolbar>
                 </Container>
             </AppBar>
-
+            <UserForm open={openModal} handleClose={handleCloseModal} type={userFormType} handleFormType={handleFormType}/>
         </>
     );
 }

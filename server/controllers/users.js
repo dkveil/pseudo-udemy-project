@@ -7,7 +7,7 @@ const usersData = [
     courses: [
       coursesData[0].id,
     ],
-    login: 'User',
+    login: 'user',
     password: '123456',
   },
   {
@@ -37,7 +37,7 @@ exports.postUser = (request, response, next) => {
     const isPasswordCorrect = user.password === password;
     if (!isPasswordCorrect) {
       response.status(401).json({
-        message: 'Login or passwod does not match',
+        message: 'Login or password does not match',
       });
 
       return;
