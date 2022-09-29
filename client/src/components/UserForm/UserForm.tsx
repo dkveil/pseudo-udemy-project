@@ -47,7 +47,7 @@ const registerValidationSchema= Yup.object({
 const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
 
     const { setUser } = useStoreContext()
-    const [validateMessage, setValidateMessage ] = React.useState('')
+    const [validateMessage, setValidateMessage ] = React.useState<string | null>('')
 
     const initValues = {
         login: '',
@@ -64,20 +64,47 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                     validateOnChange={false}
                     validateOnBlur={false}
                     onSubmit = {async (values, {resetForm}) => {
+                        if(type === "login"){
                             const { login, password } = values;
-                            const { data, status } = await request.post(
+                            await request.post(
                                 '/users',
                                 { login, password })
-                            if(status === 200){
-                                setUser(data.user)
-                                handleClose()
-                                resetForm()
-                            } else {
-                                handleClose()
-                                setValidateMessage(data.message)
-                            }
+                            .then((res) => {
+                                const { data, status } = res
+                                if(status === 200){
+                                    setUser(data.user)
+                                    handleClose()
+                                    resetForm()
+                                }
+                            })
+                            .catch((error) => {
+                                if (error.response) {
+                                    const { message } = error.response.data
+                                    setValidateMessage(message);
+                                }
+                            })
                         }
-                    }
+
+                        if(type === "register"){
+                            const { login, password} = values;
+                            await request.put(
+                                '/users',
+                                { login, password })
+                            .then(({data, status}) => {
+                                if(status === 201){
+                                    setUser(data.user)
+                                    handleClose()
+                                    resetForm()
+                                }
+                            })
+                            .catch((error) => {
+                                if (error.response) {
+                                    const { message } = error.response.data
+                                    setValidateMessage(message);
+                                }
+                            })
+                        }
+                    }}
                 >
                     {({
                         handleSubmit,
@@ -94,13 +121,15 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                         component="div"
                                         sx={{
                                             fontSize: '42px',
-                                            mb: 2
+                                            mb: 4
                                         }}
                                     >
                                         Login to your account
                                     </Typography>
-                                    {/* <FormHelperText>ss</FormHelperText> */}
                                     <FormWrapper onSubmit={handleSubmit}>
+                                        {validateMessage && (
+                                            <FormHelperText sx={{position: 'absolute', top: '-20%', color: 'error.main', fontWeight: 'bold', lineHeight: 1}}>{validateMessage}</FormHelperText>
+                                        )}
                                         <TextField
                                             error={errors.login ? true : false}
                                             id="login"
@@ -138,7 +167,7 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                                 }
                                             }}
                                         >
-                                            Don't have account yet? <b onClick={() => {return resetForm(), handleFormType('register')}}>Register now.</b>
+                                            Don't have account yet? <b onClick={() => {return resetForm(), setValidateMessage(null),handleFormType('register')}}>Register now.</b>
                                         </Typography>
                                     </Box>
                                 </>
@@ -152,12 +181,15 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                         component="div"
                                         sx={{
                                             fontSize: '38px',
-                                            mb: 2
+                                            mb: 4
                                         }}
                                     >
                                         Register new account
                                     </Typography>
                                     <FormWrapper onSubmit={handleSubmit}>
+                                        {validateMessage && (
+                                            <FormHelperText sx={{position: 'absolute', top: '-15%', color: 'error.main', fontWeight: 'bold', lineHeight: 1}}>{validateMessage}</FormHelperText>
+                                        )}
                                         <TextField
                                             error={errors.login ? true : false}
                                             id="login"
@@ -206,7 +238,7 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                                 }
                                             }}
                                         >
-                                            Have you already created an account? <b onClick={() =>{ return resetForm({values: initValues}), handleFormType('login')}}>Login now.</b>
+                                            Have you already created an account? <b onClick={() =>{ return resetForm(), setValidateMessage(null), handleFormType('login')}}>Login now.</b>
                                         </Typography>
                                     </Box>
                                 </>

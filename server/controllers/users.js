@@ -25,7 +25,7 @@ exports.postUser = (request, response, next) => {
   try {
     const { login, password } = request.body;
 
-    const user = usersData.find(u => u.login === login);
+    const user = usersData.find(u => u.login == login);
     if (!user) {
       response.status(404).json({
         message: 'User does not exist',
@@ -53,6 +53,48 @@ exports.postUser = (request, response, next) => {
     });
   }
 };
+
+exports.addUser = (request, response, next) => {
+  try {
+    const { login, password } = request.body;
+    if( !login || !password) {
+      response.status(400).json({
+        message: 'Not all information was provided'
+      });
+
+      return
+    }
+
+    const isUserExist = usersData.some(({login: currentLogin}) => currentLogin === login);
+    if(isUserExist) {
+      response.status(409).json({
+        message: `A user with the given login already exist`
+      })
+
+      return
+    }
+
+    const newUser = {
+      accessLevel: 0,
+      budget: 150,
+      courses: [],
+      login,
+      password,
+    }
+
+    usersData.push(newUser)
+
+    response.status(200).json({
+      user: newUser
+    })
+  }
+  catch( error ) {
+    response.status(500).json({
+      error,
+      message: 'Something went wrong with the endpoints /users'
+    })
+  }
+}
 
 exports.patchUser = (request, response, next) => {
   try {

@@ -142,7 +142,7 @@ const Header = () => {
                     onClose={handleCloseUserMenu}
                 >
                     {Boolean(user) ? (
-                        <MenuItem onClick={handleCloseUserMenu}>
+                        <MenuItem onClick={() => { return setUser(null), handleCloseUserMenu()}}>
                             <Typography textAlign="center">Log out</Typography>
                         </MenuItem>
                     ) : (
