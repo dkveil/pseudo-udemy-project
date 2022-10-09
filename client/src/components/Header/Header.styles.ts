@@ -2,6 +2,7 @@ import { styled } from '@mui/system'
 import MuiAppBar from '@mui/material/AppBar'
 import MuiToolbar from '@mui/material/Toolbar'
 import { InputBase } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export const AppBar = styled(MuiAppBar)`
     position: relative;
@@ -61,3 +62,8 @@ export const SearchIconWrapper = styled('div')(({theme}) => `
     color: black;
     pointer-events: none;
 `)
+
+export const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+`;

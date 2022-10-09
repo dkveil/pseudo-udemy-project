@@ -7,9 +7,12 @@ interface IWrapper extends BoxProps{
 }
 
 export const Wrapper = styled(Box)<IWrapper>`
+    position: relative;
     background-color: ${({backgroundColor}) => backgroundColor};
     height: 350px;
+    width: 100vw;
     margin: auto;
+    overflow: hidden;
 `
 
 export const ContentWrapper = styled(Box)`

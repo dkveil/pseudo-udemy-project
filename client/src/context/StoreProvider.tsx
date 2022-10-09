@@ -11,6 +11,7 @@ interface IUser {
     courses: Array<ICourses>;
     login: string;
     password: string;
+    avatar: string;
 }
 
 interface IStoreContext {

@@ -9,6 +9,7 @@ const usersData = [
     ],
     login: 'user',
     password: '123456',
+    avatar: null,
   },
   {
     accessLevel: 1,
@@ -16,8 +17,9 @@ const usersData = [
     courses: [
       coursesData.map(course => course.id)
     ],
-    login: 'Admin',
+    login: 'admin',
     password: '******',
+    avatar: null
   }
 ];
 
@@ -57,7 +59,7 @@ exports.postUser = (request, response, next) => {
 exports.addUser = (request, response, next) => {
   try {
     const { login, password } = request.body;
-    if( !login || !password) {
+    if (!login || !password) {
       response.status(400).json({
         message: 'Not all information was provided'
       });
@@ -65,8 +67,8 @@ exports.addUser = (request, response, next) => {
       return
     }
 
-    const isUserExist = usersData.some(({login: currentLogin}) => currentLogin === login);
-    if(isUserExist) {
+    const isUserExist = usersData.some(({ login: currentLogin }) => currentLogin === login);
+    if (isUserExist) {
       response.status(409).json({
         message: `A user with the given login already exist`
       })
@@ -80,6 +82,7 @@ exports.addUser = (request, response, next) => {
       courses: [],
       login,
       password,
+      avatar: null
     }
 
     usersData.push(newUser)
@@ -88,7 +91,7 @@ exports.addUser = (request, response, next) => {
       user: newUser
     })
   }
-  catch( error ) {
+  catch (error) {
     response.status(500).json({
       error,
       message: 'Something went wrong with the endpoints /users'

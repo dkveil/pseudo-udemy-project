@@ -21,8 +21,8 @@ const Hero = () => {
     }, [user]);
 
     return (
-        <Wrapper backgroundColor={heroBgColor} maxWidth={{ lg: 'lg' }}>
-            <Container maxWidth="xl" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+        <Wrapper backgroundColor={heroBgColor} maxWidth={{ xs: '100%', lg: 'lg' }}>
+            <Container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%', width: '100%' }}>
                 <ContentWrapper>
                     <Typography component="h1" variant="h4" sx={{ fontWeight: 'bold' }}>
                         {headingContent}
