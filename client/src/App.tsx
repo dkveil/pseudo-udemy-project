@@ -1,11 +1,12 @@
-import MainTemplate from "./templates/MainTemplate";
+import MainTemplate from './templates/MainTemplate';
+import Hero from './containers/Hero/Hero';
 
 const App = () => {
     return (
         <MainTemplate>
-            App
+            <Hero />
         </MainTemplate>
     );
-}
+};
 
 export default App;

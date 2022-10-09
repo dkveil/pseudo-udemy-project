@@ -1,43 +1,59 @@
-import React from 'react'
+import React from 'react';
 import request from './../helpers/request';
 
-interface IStoreContext {
-    user: boolean | null,
-    courses: any,
-    setCourses: any,
-    setUser: any,
+interface ICourses {
+    id: string;
 }
 
-const StoreContext = React.createContext({} as IStoreContext)
+interface IUser {
+    accessLevel: number;
+    budget: number;
+    courses: Array<ICourses>;
+    login: string;
+    password: string;
+}
 
-export const useStoreContext = () => React.useContext(StoreContext)
+interface IStoreContext {
+    user: IUser | null;
+    courses: any;
+    setCourses: any;
+    setUser: any;
+}
 
-interface IStoreProvider { children: React.ReactNode }
+const StoreContext = React.createContext({} as IStoreContext);
 
-const StoreProvider = ({children}: IStoreProvider) => {
-    const [courses, setCourses] = React.useState([])
-    const [user, setUser] = React.useState(null)
+export const useStoreContext = () => React.useContext(StoreContext);
+
+interface IStoreProvider {
+    children: React.ReactNode;
+}
+
+const StoreProvider = ({ children }: IStoreProvider) => {
+    const [courses, setCourses] = React.useState([]);
+    const [user, setUser] = React.useState(null);
 
     const fetchData = async () => {
         const { data } = await request.get('/courses');
 
-        setCourses(data.courses)
-    }
+        setCourses(data.courses);
+    };
 
     React.useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     return (
-        <StoreContext.Provider value={{
-            courses,
-            setCourses,
-            user,
-            setUser
-        }}>
+        <StoreContext.Provider
+            value={{
+                courses,
+                setCourses,
+                user,
+                setUser,
+            }}
+        >
             {children}
         </StoreContext.Provider>
-    )
-}
+    );
+};
 
 export default StoreProvider;

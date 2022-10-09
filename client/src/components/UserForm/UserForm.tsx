@@ -128,7 +128,7 @@ const UserForm = ({type, open, handleClose, handleFormType}: IUserForm) => {
                                     </Typography>
                                     <FormWrapper onSubmit={handleSubmit}>
                                         {validateMessage && (
-                                            <FormHelperText sx={{position: 'absolute', top: '-20%', color: 'error.main', fontWeight: 'bold', lineHeight: 1}}>{validateMessage}</FormHelperText>
+                                            <FormHelperText sx={{display: {xs: 'block'},position: 'absolute', top: '-20%', color: 'error.main', fontWeight: 'bold', lineHeight: 1}}>{validateMessage}</FormHelperText>
                                         )}
                                         <TextField
                                             error={errors.login ? true : false}

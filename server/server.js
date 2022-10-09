@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -13,4 +14,4 @@ server.use(cors());
 server.use('/courses', coursesRoutes);
 server.use('/users', usersRoutes);
 
-server.listen(8000, () => console.log('Server for course is started...'));
+server.listen(8000, () => console.log(`Server for course is started... `));

@@ -4,8 +4,10 @@ import MuiToolbar from '@mui/material/Toolbar'
 import { InputBase } from '@mui/material';
 
 export const AppBar = styled(MuiAppBar)`
+    position: relative;
     background-color: white;
     height: 80px;
+    z-index: 1;
 `
 
 export const Toolbar = styled(MuiToolbar)`
