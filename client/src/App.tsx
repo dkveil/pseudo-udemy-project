@@ -1,12 +1,14 @@
 import MainTemplate from './templates/MainTemplate';
-import Hero from './containers/Hero/Hero';
-// import { Routes, Route } from 'react-router';
+import { Routes, Route } from 'react-router';
+import Homepage from './pages/Home';
 
 const App = () => {
     return (
         <MainTemplate>
             <main>
-                <Hero />
+                <Routes>
+                    <Route path="/" element={<Homepage />} />
+                </Routes>
             </main>
         </MainTemplate>
     );

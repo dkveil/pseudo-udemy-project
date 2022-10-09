@@ -4,10 +4,82 @@ const coursesData = [
   {
     authors: ['author name'],
     id: uuid(),
-    img: 'https://img-a.udemycdn.com/course/240x135/1673856_ff13_5.jpg',
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
     title: 'course title',
     description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title',
+    description: 'description',
+    opinions: 200,
+    rate: 5
   },
 ];
 
@@ -51,7 +123,7 @@ exports.getCourse = (request, response, next) => {
 exports.postCourse = (request, response, next) => {
   try {
     const { authors, img, price, title } = request.body;
-    if ( !authors || !price || !title ) {
+    if (!authors || !price || !title) {
       response.status(400).json({
         message: 'Not all information was provided',
       });
@@ -59,7 +131,7 @@ exports.postCourse = (request, response, next) => {
       return;
     }
 
-    const isCourseExist = coursesData.some(({title: currentTitle}) => currentTitle === title);
+    const isCourseExist = coursesData.some(({ title: currentTitle }) => currentTitle === title);
     if (isCourseExist) {
       response.status(409).json({
         message: `A course with the given title already exists - ${title}`,

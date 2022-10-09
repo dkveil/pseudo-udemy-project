@@ -21,6 +21,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ListIcon from '@mui/icons-material/List';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { USER_TYPE } from '../../utils/userTypes';
 
 const links = {
     profile: '/',
@@ -131,7 +132,7 @@ const Header = () => {
                 </MenuItem>
             </StyledLink>
             <Divider />
-            {user.accessLevel === 1 && (
+            {user.accessLevel === USER_TYPE.ADMIN && (
                 <StyledLink to={links.adminpanel}>
                     <MenuItem onClick={handleCloseUserMenu}>
                         <ListItemIcon>

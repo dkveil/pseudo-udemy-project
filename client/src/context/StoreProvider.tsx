@@ -5,7 +5,18 @@ interface ICourses {
     id: string;
 }
 
-interface IUser {
+export interface ICourse {
+    id: string;
+    title: string;
+    authors: Array<string>;
+    description: string;
+    img: string;
+    price: number;
+    rate: number;
+    opinions: number;
+}
+
+export interface IUser {
     accessLevel: number;
     budget: number;
     courses: Array<ICourses>;
@@ -16,7 +27,7 @@ interface IUser {
 
 interface IStoreContext {
     user: IUser | null;
-    courses: any;
+    courses: Array<ICourse>;
     setCourses: any;
     setUser: any;
 }
