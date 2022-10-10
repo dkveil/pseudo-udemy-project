@@ -1,5 +1,6 @@
 import React from 'react';
 import request from './../helpers/request';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface ICourses {
     id: string;
@@ -42,7 +43,7 @@ interface IStoreProvider {
 
 const StoreProvider = ({ children }: IStoreProvider) => {
     const [courses, setCourses] = React.useState([]);
-    const [user, setUser] = React.useState(null);
+    const [user, setUser] = useLocalStorage<IUser | null>('user', null);
 
     const fetchData = async () => {
         const { data } = await request.get('/courses');

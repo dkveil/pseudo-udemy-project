@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
 interface IShoppingCartContext {
     products: string[];
@@ -18,7 +19,7 @@ interface IShoppingCartProvider {
 export const useShoppingCartContext = () => React.useContext(ShoppingCartContext);
 
 const ShoppingCartProvider = ({ children }: IShoppingCartProvider) => {
-    const [products, setProducts] = React.useState<string[]>([]);
+    const [products, setProducts] = useSessionStorage<string[]>('shopping cart', []);
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
     const addProduct = (id: string) => {
