@@ -15,9 +15,8 @@ const Courses = () => {
                 </Typography>
                 <Grid container spacing={2}>
                     {courses.slice(0, 6).map((course) => (
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid item xs={12} sm={6} md={4} key={course.id}>
                             <CourseCard
-                                key={course.id}
                                 authors={course.authors}
                                 description={course.description}
                                 id={course.id}

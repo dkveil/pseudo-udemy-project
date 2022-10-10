@@ -5,10 +5,9 @@ import { InputBase } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export const AppBar = styled(MuiAppBar)`
-    position: relative;
     background-color: white;
     height: 80px;
-    z-index: 1;
+    z-index: 4;
 `
 
 export const Toolbar = styled(MuiToolbar)`

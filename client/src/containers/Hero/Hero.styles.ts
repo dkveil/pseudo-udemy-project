@@ -13,6 +13,7 @@ export const Wrapper = styled(Box)<IWrapper>`
     width: 100vw;
     margin: auto;
     overflow: hidden;
+    margin-top: 80px;
 `
 
 export const ContentWrapper = styled(Box)`

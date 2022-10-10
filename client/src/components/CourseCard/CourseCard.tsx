@@ -4,12 +4,17 @@ import { ICourse } from '../../context/StoreProvider';
 import { formatCurrency } from '../../utils/formatCurrency';
 import Button from '../Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useShoppingCartContext } from '../../context/ShopingCartProvider';
 
 const CourseCard = ({ id, authors, description, img, price, title, opinions, rate }: ICourse) => {
+    const { products, addProduct, removeProduct } = useShoppingCartContext();
+
+    const isAdded = products.find((product) => product === id) ? true : false;
+
     return (
         <>
-            <Paper elevation={8} variant="outlined" sx={{ overflow: 'hidden', position: 'relative' }}>
-                <CardMedia component="img" height="215" src={img} alt={title} />
+            <Paper elevation={4} sx={{ overflow: 'hidden', position: 'relative', paddingBottom: 2 }}>
+                <CardMedia component="img" height="205" src={img} alt={title} />
                 <Box paddingX={1} paddingY={0.5}>
                     <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                         {title}
@@ -23,7 +28,7 @@ const CourseCard = ({ id, authors, description, img, price, title, opinions, rat
                         }}
                     >
                         <Typography variant="body1">{description}</Typography>
-                        <Typography variant="body2"> Authors: {authors.map((author) => author)}</Typography>
+                        <Typography variant="body2"> Authors: {authors.join(', ')}</Typography>
                     </Box>
                     <Box></Box>
                     <Box
@@ -46,8 +51,13 @@ const CourseCard = ({ id, authors, description, img, price, title, opinions, rat
                             {formatCurrency(price, 'EUR')}
                         </Typography>
                     </Box>
-                    <Button variant="contained" sx={{ position: 'absolute', bottom: 0, right: 0 }} endIcon={<ShoppingCartIcon />}>
-                        Buy
+                    <Button
+                        variant="contained"
+                        sx={{ position: 'absolute', bottom: 0, right: 0 }}
+                        endIcon={<ShoppingCartIcon />}
+                        onClick={isAdded ? () => removeProduct(id) : () => addProduct(id)}
+                    >
+                        {isAdded ? 'Remove from cart' : 'Add to cart'}
                     </Button>
                 </Box>
             </Paper>

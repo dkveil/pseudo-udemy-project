@@ -22,6 +22,7 @@ import ListIcon from '@mui/icons-material/List';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { USER_TYPE } from '../../utils/userTypes';
+import { useShoppingCartContext } from './../../context/ShopingCartProvider';
 
 const links = {
     profile: '/',
@@ -33,6 +34,8 @@ const links = {
 };
 
 const Header = () => {
+    const { openCart, products } = useShoppingCartContext();
+
     const [openModal, setOpenModal] = React.useState<boolean>(true);
     const [userFormType, setUserFormType] = React.useState<'register' | 'login' | null>(null);
 
@@ -115,14 +118,17 @@ const Header = () => {
                     <ListItemText>My courses</ListItemText>
                 </MenuItem>
             </StyledLink>
-            <StyledLink to={links.shoppingcart}>
-                <MenuItem onClick={handleCloseUserMenu}>
-                    <ListItemIcon>
-                        <ShoppingCartIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Shopping cart</ListItemText>
-                </MenuItem>
-            </StyledLink>
+            <MenuItem
+                onClick={() => {
+                    handleCloseUserMenu();
+                    openCart();
+                }}
+            >
+                <ListItemIcon>
+                    <ShoppingCartIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Shopping cart</ListItemText>
+            </MenuItem>
             <StyledLink to={links.wishlist}>
                 <MenuItem onClick={handleCloseUserMenu}>
                     <ListItemIcon>
@@ -230,8 +236,8 @@ const Header = () => {
             <Box sx={{ minWidth: '300px', display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                 {user ? (
                     <>
-                        <Badge badgeContent={2} color="primary" sx={{ mr: 2 }}>
-                            <IconButton sx={{ padding: 0 }} size="large">
+                        <Badge badgeContent={products.length} color="primary" sx={{ mr: 2 }}>
+                            <IconButton sx={{ padding: 0 }} size="large" onClick={openCart}>
                                 <ShoppingCartIcon sx={{ color: 'black' }} />
                             </IconButton>
                         </Badge>
@@ -248,8 +254,8 @@ const Header = () => {
                     </>
                 ) : (
                     <>
-                        <Badge badgeContent={2} color="primary">
-                            <IconButton sx={{ padding: 0 }} size="large">
+                        <Badge badgeContent={products.length} color="primary">
+                            <IconButton sx={{ padding: 0 }} size="large" onClick={openCart}>
                                 <ShoppingCartIcon sx={{ color: 'black' }} />
                             </IconButton>
                         </Badge>
@@ -294,8 +300,8 @@ const Header = () => {
                 <IconButton sx={{ padding: 0 }} size="medium">
                     <SearchIcon sx={{ color: 'black' }} />
                 </IconButton>
-                <Badge badgeContent={3} color="primary">
-                    <IconButton sx={{ padding: 0 }} size="large">
+                <Badge badgeContent={products.length} color="primary">
+                    <IconButton sx={{ padding: 0 }} size="large" onClick={openCart}>
                         <ShoppingCartIcon sx={{ color: 'black' }} />
                     </IconButton>
                 </Badge>
@@ -305,7 +311,7 @@ const Header = () => {
 
     return (
         <>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Container maxWidth="xl" sx={{ height: 'inherit' }}>
                     <Toolbar disableGutters>{windowWidth > size.DESKTOP ? desktopToolbar : mobileToolbar}</Toolbar>
                 </Container>
