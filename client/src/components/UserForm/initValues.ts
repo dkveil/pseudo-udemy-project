@@ -3,4 +3,5 @@ export const initValues = {
     password: '',
     passwordConfirmation: '',
     funds: 0,
+    newPassword: ''
 };

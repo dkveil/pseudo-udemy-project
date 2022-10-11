@@ -20,6 +20,7 @@ interface FormModel {
     password: string;
     passwordConfirmation?: string;
     funds: number | undefined;
+    newPassword?: string;
 }
 
 const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
@@ -102,6 +103,52 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                     login: user?.login,
                                     addedFunds: funds,
                                     action: 'adding funds',
+                                })
+                                .then(({ data, status }) => {
+                                    if (status === 202) {
+                                        setUser(data.user);
+                                        handleClose();
+                                        resetForm();
+                                    }
+                                })
+                                .catch((error) => {
+                                    if (error.response) {
+                                        const { message } = error.response.data;
+                                        setValidateMessage(message);
+                                    }
+                                });
+                        }
+
+                        if (type === 'change username') {
+                            const { login } = values;
+                            await request
+                                .patch('/users', {
+                                    login: user?.login,
+                                    newLogin: login,
+                                    action: 'changing username',
+                                })
+                                .then(({ data, status }) => {
+                                    if (status === 202) {
+                                        setUser(data.user);
+                                        handleClose();
+                                        resetForm();
+                                    }
+                                })
+                                .catch((error) => {
+                                    if (error.response) {
+                                        const { message } = error.response.data;
+                                        setValidateMessage(message);
+                                    }
+                                });
+                        }
+                        if (type === 'change password') {
+                            const { password, newPassword } = values;
+                            await request
+                                .patch('/users', {
+                                    login: user?.login,
+                                    checkedPassword: password,
+                                    newPassword,
+                                    action: 'changing password',
                                 })
                                 .then(({ data, status }) => {
                                     if (status === 202) {
@@ -339,6 +386,118 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                     </FormWrapper>
                                     <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={() => handleSubmit()}>
                                         Add funds
+                                    </Button>
+                                </>
+                            );
+                        }
+                        if (type === 'change username') {
+                            return (
+                                <>
+                                    <Typography
+                                        variant="h3"
+                                        component="div"
+                                        sx={{
+                                            fontSize: '38px',
+                                            mb: 4,
+                                        }}
+                                    >
+                                        Change username
+                                    </Typography>
+                                    <FormWrapper onSubmit={handleSubmit}>
+                                        {validateMessage && (
+                                            <FormHelperText
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '-15%',
+                                                    color: 'error.main',
+                                                    fontWeight: 'bold',
+                                                    lineHeight: 1,
+                                                }}
+                                            >
+                                                {validateMessage}
+                                            </FormHelperText>
+                                        )}
+                                        <TextField
+                                            error={errors.login ? true : false}
+                                            id="login"
+                                            label={errors.login ? errors.login : 'New username'}
+                                            variant="filled"
+                                            color="secondary"
+                                            name="login"
+                                            value={values.login}
+                                            onChange={handleChange}
+                                            type="string"
+                                        />
+                                    </FormWrapper>
+                                    <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={() => handleSubmit()}>
+                                        Change
+                                    </Button>
+                                </>
+                            );
+                        }
+                        if (type === 'change password') {
+                            return (
+                                <>
+                                    <Typography
+                                        variant="h3"
+                                        component="div"
+                                        sx={{
+                                            fontSize: '38px',
+                                            mb: 4,
+                                        }}
+                                    >
+                                        Change password
+                                    </Typography>
+                                    <FormWrapper onSubmit={handleSubmit}>
+                                        {validateMessage && (
+                                            <FormHelperText
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '-15%',
+                                                    color: 'error.main',
+                                                    fontWeight: 'bold',
+                                                    lineHeight: 1,
+                                                }}
+                                            >
+                                                {validateMessage}
+                                            </FormHelperText>
+                                        )}
+                                        <TextField
+                                            error={errors.password ? true : false}
+                                            id="password"
+                                            label={errors.password ? errors.password : 'Your old password'}
+                                            variant="filled"
+                                            color="secondary"
+                                            type="password"
+                                            name="password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            error={errors.passwordConfirmation ? true : false}
+                                            id="password confirmation"
+                                            label={errors.passwordConfirmation ? errors.passwordConfirmation : 'Repeat your password'}
+                                            variant="filled"
+                                            color="secondary"
+                                            type="password"
+                                            name="passwordConfirmation"
+                                            value={values.passwordConfirmation}
+                                            onChange={handleChange}
+                                        />
+                                        <TextField
+                                            error={errors.newPassword ? true : false}
+                                            id="newPassword"
+                                            label={errors.newPassword ? errors.password : 'Your new password'}
+                                            variant="filled"
+                                            color="secondary"
+                                            type="password"
+                                            name="newPassword"
+                                            value={values.newPassword}
+                                            onChange={handleChange}
+                                        />
+                                    </FormWrapper>
+                                    <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={() => handleSubmit()}>
+                                        Change
                                     </Button>
                                 </>
                             );

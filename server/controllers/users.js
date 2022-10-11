@@ -101,7 +101,7 @@ exports.addUser = (request, response, next) => {
 
 exports.patchUser = (request, response, next) => {
   try {
-    const { login, boughtCourses, totalPrice, action, addedFunds } = request.body;
+    const { login, boughtCourses, totalPrice, action, addedFunds, newLogin, checkedPassword, newPassword } = request.body;
 
     const user = usersData.find(user => user.login === login);
 
@@ -135,6 +135,29 @@ exports.patchUser = (request, response, next) => {
       response.status(202).json({
         user,
       });
+    }
+
+    if (action === "changing username") {
+      user.login = newLogin
+      response.status(202).json({
+        user,
+      });
+    }
+    if (action === "changing password") {
+
+      if (user.password !== checkedPassword) {
+        response.status(403).json({
+          message: 'Old password does not match',
+        });
+
+        return;
+      }
+
+      user.password = newPassword
+      response.status(202).json({
+        user,
+      });
+
     }
 
   } catch (error) {
