@@ -101,7 +101,7 @@ exports.addUser = (request, response, next) => {
 
 exports.patchUser = (request, response, next) => {
   try {
-    const { login, boughtCourses, totalPrice } = request.body;
+    const { login, boughtCourses, totalPrice, action, addedFunds } = request.body;
 
     const user = usersData.find(user => user.login === login);
 
@@ -113,20 +113,30 @@ exports.patchUser = (request, response, next) => {
       return;
     }
 
-    const hasUserEnoughtMoney = user.budget - totalPrice >= 0;
-    if (!hasUserEnoughtMoney) {
-      response.status(403).json({
-        message: 'User has not enough funds to pay',
-      });
+    if (action === "buying a course") {
+      const hasUserEnoughtMoney = user.budget - totalPrice >= 0;
+      if (!hasUserEnoughtMoney) {
+        response.status(403).json({
+          message: 'User has not enough funds to pay',
+        });
 
-      return;
+        return;
+      }
+
+      user.budget = Number((user.budget - totalPrice).toFixed(2));
+      user.courses = user.courses.concat(boughtCourses);
+      response.status(202).json({
+        user,
+      });
     }
 
-    user.budget = Number((user.budget - totalPrice).toFixed(2));
-    user.courses = user.courses.concat(boughtCourses);
-    response.status(202).json({
-      user,
-    });
+    if (action === "adding funds") {
+      user.budget = user.budget + addedFunds
+      response.status(202).json({
+        user,
+      });
+    }
+
   } catch (error) {
     response.status(500).json({
       error,

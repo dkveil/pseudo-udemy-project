@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, IconButton, Box, Avatar, Tooltip, Divider } from '@mui/material';
-import { IUser, useStoreContext } from '../../context/StoreProvider';
+import { useStoreContext } from '../../context/StoreProvider';
 import { AppBar, Toolbar, Search, StyledInputBase, SearchIconWrapper, StyledLink } from './Header.styles';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';

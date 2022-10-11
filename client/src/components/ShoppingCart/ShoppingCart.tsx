@@ -22,11 +22,24 @@ const ShoppingCart = () => {
             setTransactionLoading(true);
 
             const handleTransaction = async () => {
+                if (user && totalPrice && user.budget < totalPrice) {
+                    setTransactionLoading(false);
+                    setOpenedAlert(true);
+                    closeCart();
+                    setAlertStatus('error');
+                    setAlertMessage('You have not enough funds to pay!');
+                    setTimeout(() => {
+                        setOpenedAlert(false);
+                    }, 3000);
+
+                    return;
+                }
                 try {
                     const { data, status } = await request.patch('/users', {
                         login: user?.login,
                         boughtCourses: products,
                         totalPrice,
+                        action: 'buying a course',
                     });
 
                     if (status === 202) {
@@ -43,6 +56,7 @@ const ShoppingCart = () => {
                     }
                 } catch (error) {
                     setTransactionLoading(false);
+                    setOpenedAlert(true);
                     setAlertStatus('error');
                     setAlertMessage('Something went wrong!');
                 }

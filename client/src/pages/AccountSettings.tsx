@@ -6,6 +6,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import UserForm, { IUserForm } from './../components/UserForm/UserForm';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import AddCardIcon from '@mui/icons-material/AddCard';
+import { useStoreContext } from '../context/StoreProvider';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -39,6 +40,7 @@ const settingsList: ISetting[] = [
 ];
 
 const AccountSettings = () => {
+    const { user } = useStoreContext();
     const [openModal, setOpenModal] = React.useState<boolean>(false);
     const [userFormType, setUserFormType] = React.useState<IUserForm['type']>(null);
 
@@ -61,21 +63,27 @@ const AccountSettings = () => {
             <section>
                 <Container maxWidth="lg" sx={{ paddingY: 6 }}>
                     <Grid container spacing={2}>
-                        {settingsList?.map((item) => (
-                            <Grid item key={item.name} xs={12} sm={6} md={3}>
-                                <Card
-                                    sx={{ height: 280, textAlign: 'center', cursor: 'pointer' }}
-                                    onClick={() => handleOpenModal(item.name)}
-                                >
-                                    <CardContent>
-                                        {item.icon}
-                                        <Typography variant="h5">
-                                            {item.name && item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
+                        {user ? (
+                            <>
+                                {settingsList?.map((item) => (
+                                    <Grid item key={item.name} xs={12} sm={6} md={3}>
+                                        <Card
+                                            sx={{ height: 280, textAlign: 'center', cursor: 'pointer' }}
+                                            onClick={() => handleOpenModal(item.name)}
+                                        >
+                                            <CardContent>
+                                                {item.icon}
+                                                <Typography variant="h5">
+                                                    {item.name && item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </>
+                        ) : (
+                            <Typography variant="body2">You have no access to this page! Please log in first!</Typography>
+                        )}
                     </Grid>
                 </Container>
             </section>

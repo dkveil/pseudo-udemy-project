@@ -14,7 +14,7 @@ const Wrapper = styled(Box)`
 `;
 
 const MyCourses = () => {
-    const [category, setCategory] = React.useState<'courses' | 'wishlist'>('wishlist');
+    const [category, setCategory] = React.useState<'courses' | 'wishlist'>('courses');
 
     const { user, courses } = useStoreContext();
     const location = useLocation();
@@ -33,6 +33,8 @@ const MyCourses = () => {
         setCategory(newValue);
         navigate(newValue === 'courses' ? '/my-courses' : '/wish-list');
     };
+
+    console.log(user?.courses);
 
     return (
         <>
@@ -55,10 +57,10 @@ const MyCourses = () => {
             </Wrapper>
             <section>
                 <Container maxWidth="lg">
-                    <Grid container spacing={2} sx={{ paddingY: 6 }}>
+                    <Grid container spacing={2} sx={{ paddingY: 6, paddingX: 2 }}>
                         {user && category ? (
                             user[category].length === 0 ? (
-                                <Typography>You have no courses here</Typography>
+                                <Typography variant="body2">You have no courses here</Typography>
                             ) : (
                                 <>
                                     {user[category].map((item) => {
@@ -85,7 +87,7 @@ const MyCourses = () => {
                                 </>
                             )
                         ) : (
-                            <Typography variant="subtitle1">You have no access to this page! Please log in first!</Typography>
+                            <Typography variant="body2">You have no access to this page! Please log in first!</Typography>
                         )}
                     </Grid>
                 </Container>

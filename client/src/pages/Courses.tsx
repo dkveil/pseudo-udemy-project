@@ -47,7 +47,7 @@ const Courses = () => {
                 </Container>
             </Wrapper>
             <section>
-                <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', paddingY: 6 }}>
+                <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', paddingY: 6, paddingX: 2 }}>
                     <Grid container spacing={2} sx={{ mb: 6 }}>
                         {courses.slice(firstCourseOnThePage, lastCourseOnThePage).map((course) => (
                             <Grid item xs={12} sm={6} md={4} key={course.id}>
