@@ -17,6 +17,7 @@ export interface IUser {
     accessLevel: number;
     budget: number;
     courses: string[];
+    wishlist: string[];
     login: string;
     password: string;
     avatar: string;

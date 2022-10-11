@@ -6,6 +6,10 @@ export const theme = createTheme({
         secondary: {
             main: '#a435f0',
         },
+        text: {
+            secondary: 'rgba(90,70,70,0.54)',
+        },
+        divider: '#ffffff',
     },
     breakpoints: {
         values: {

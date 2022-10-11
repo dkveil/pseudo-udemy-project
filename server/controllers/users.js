@@ -7,6 +7,7 @@ const usersData = [
     courses: [
       coursesData[0].id,
     ],
+    wishlist: [],
     login: 'user',
     password: '123456',
     avatar: null,
@@ -14,8 +15,8 @@ const usersData = [
   {
     accessLevel: 1,
     budget: 1000000,
-    courses: [
-    ],
+    courses: [],
+    wishlist: [],
     login: 'admin',
     password: '******',
     avatar: null

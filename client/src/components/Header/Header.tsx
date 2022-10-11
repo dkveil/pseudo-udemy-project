@@ -23,13 +23,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { USER_TYPE } from '../../utils/userTypes';
 import { useShoppingCartContext } from './../../context/ShopingCartProvider';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const links = {
     profile: '/',
     usersettings: '/',
     courses: '/my-courses',
     shoppingcart: '/',
-    wishlist: '/',
+    wishlist: '/wish-list',
     adminpanel: '/',
 };
 
@@ -236,6 +237,13 @@ const Header = () => {
             <Box sx={{ minWidth: '300px', display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                 {user ? (
                     <>
+                        <Tooltip title="Wish list">
+                            <StyledLink to={links.wishlist}>
+                                <IconButton>
+                                    <FavoriteBorderIcon sx={{ color: 'black' }} />
+                                </IconButton>
+                            </StyledLink>
+                        </Tooltip>
                         <Badge badgeContent={products.length} color="primary" sx={{ mr: 2 }}>
                             <IconButton sx={{ padding: 0 }} size="large" onClick={openCart}>
                                 <ShoppingCartIcon sx={{ color: 'black' }} />
