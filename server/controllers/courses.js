@@ -6,7 +6,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 1',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -16,7 +16,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 2',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -26,7 +26,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 3',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -36,7 +36,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 4',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -46,7 +46,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 5',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -56,7 +56,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 6',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -66,7 +66,7 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 7',
     description: 'description',
     opinions: 200,
     rate: 5
@@ -76,11 +76,32 @@ const coursesData = [
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
     price: 69.99,
-    title: 'course title',
+    title: 'course title 8',
     description: 'description',
     opinions: 200,
     rate: 5
   },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title 9',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+  {
+    authors: ['author name'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    price: 69.99,
+    title: 'course title 10',
+    description: 'description',
+    opinions: 200,
+    rate: 5
+  },
+
 ];
 
 exports.getCourses = (request, response, next) => {

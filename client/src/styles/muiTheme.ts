@@ -3,6 +3,9 @@ import { size } from '../utils/media';
 
 export const theme = createTheme({
     palette: {
+        primary: {
+            main: '#ffffff'
+        },
         secondary: {
             main: '#a435f0',
         },

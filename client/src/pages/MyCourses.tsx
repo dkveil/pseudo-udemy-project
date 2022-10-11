@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/system';
 import { Box, Typography, Container, Grid, Tab } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { TabContext, TabList } from '@mui/lab';
 import { useStoreContext } from './../context/StoreProvider';
 import { CourseCard } from '../components/CourseCard';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -38,7 +38,7 @@ const MyCourses = () => {
         <>
             <Wrapper>
                 <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%' }}>
-                    <Typography variant="h3" component="h1" sx={{ color: 'white' }}>
+                    <Typography variant="h3" component="h1" sx={{ color: 'white', mb: 2 }}>
                         My courses
                     </Typography>
                     <Box>
