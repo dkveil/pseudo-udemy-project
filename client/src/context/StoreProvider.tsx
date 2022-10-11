@@ -2,14 +2,10 @@ import React from 'react';
 import request from './../helpers/request';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
-interface ICourses {
-    id: string;
-}
-
 export interface ICourse {
     id: string;
     title: string;
-    authors: Array<string>;
+    authors: string[];
     description: string;
     img: string;
     price: number;
@@ -20,7 +16,7 @@ export interface ICourse {
 export interface IUser {
     accessLevel: number;
     budget: number;
-    courses: Array<ICourses>;
+    courses: string[];
     login: string;
     password: string;
     avatar: string;
@@ -28,7 +24,7 @@ export interface IUser {
 
 interface IStoreContext {
     user: IUser | null;
-    courses: Array<ICourse>;
+    courses: ICourse[];
     setCourses: any;
     setUser: any;
 }

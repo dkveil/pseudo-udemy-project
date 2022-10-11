@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import { useStoreContext } from './StoreProvider';
 
 interface IShoppingCartContext {
     products: string[];
@@ -8,6 +9,7 @@ interface IShoppingCartContext {
     removeProduct: (id: string) => void;
     openCart: () => void;
     closeCart: () => void;
+    clearShoppingCart: () => void;
 }
 
 const ShoppingCartContext = React.createContext({} as IShoppingCartContext);
@@ -32,11 +34,13 @@ const ShoppingCartProvider = ({ children }: IShoppingCartProvider) => {
         setProducts(products.filter((product) => product !== id));
     };
 
+    const clearShoppingCart = () => setProducts([]);
+
     const openCart = () => setIsOpen(true);
     const closeCart = () => setIsOpen(false);
 
     return (
-        <ShoppingCartContext.Provider value={{ products, isOpen, addProduct, removeProduct, openCart, closeCart }}>
+        <ShoppingCartContext.Provider value={{ products, isOpen, addProduct, removeProduct, openCart, closeCart, clearShoppingCart }}>
             {children}
         </ShoppingCartContext.Provider>
     );

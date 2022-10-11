@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export const AppBar = styled(MuiAppBar)`
     background-color: white;
-    height: 80px;
+    height: 75px;
     z-index: 4;
 `
 

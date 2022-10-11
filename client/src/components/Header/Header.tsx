@@ -27,7 +27,7 @@ import { useShoppingCartContext } from './../../context/ShopingCartProvider';
 const links = {
     profile: '/',
     usersettings: '/',
-    courses: '/',
+    courses: '/my-courses',
     shoppingcart: '/',
     wishlist: '/',
     adminpanel: '/',

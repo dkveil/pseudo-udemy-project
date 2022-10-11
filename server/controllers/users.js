@@ -15,7 +15,6 @@ const usersData = [
     accessLevel: 1,
     budget: 1000000,
     courses: [
-      coursesData.map(course => course.id)
     ],
     login: 'admin',
     password: '******',
@@ -101,18 +100,11 @@ exports.addUser = (request, response, next) => {
 
 exports.patchUser = (request, response, next) => {
   try {
-    const { login, courseId } = request.body;
+    const { login, boughtCourses, totalPrice } = request.body;
 
-    const course = coursesData.find(course => course.id === courseId);
     const user = usersData.find(user => user.login === login);
 
-    if (!course) {
-      response.status(404).json({
-        message: 'No course with the given id was found',
-      });
-
-      return;
-    } else if (!user) {
+    if (!user) {
       response.status(404).json({
         message: 'No user with the given id was found',
       });
@@ -120,16 +112,7 @@ exports.patchUser = (request, response, next) => {
       return;
     }
 
-    const hasUserCourseAlready = user.courses.some(id => id === courseId);
-    if (hasUserCourseAlready) {
-      response.status(200).json({
-        user,
-      });
-
-      return;
-    }
-
-    const hasUserEnoughtMoney = user.budget - course.price >= 0;
+    const hasUserEnoughtMoney = user.budget - totalPrice >= 0;
     if (!hasUserEnoughtMoney) {
       response.status(403).json({
         message: 'User has not enough funds to pay',
@@ -138,8 +121,8 @@ exports.patchUser = (request, response, next) => {
       return;
     }
 
-    user.budget = Number((user.budget - course.price).toFixed(2));
-    user.courses.push(courseId);
+    user.budget = Number((user.budget - totalPrice).toFixed(2));
+    user.courses = user.courses.concat(boughtCourses);
     response.status(202).json({
       user,
     });
