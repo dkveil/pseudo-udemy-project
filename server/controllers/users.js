@@ -138,6 +138,30 @@ exports.patchUser = (request, response, next) => {
     }
 
     if (action === "changing username") {
+      if (newLogin === user.login) {
+        response.status(403).json({
+          message: "You have already this nickname"
+        })
+
+        return;
+      }
+
+      if (newLogin == "admin") {
+        response.status(403).json({
+          message: "You can't use this nickname!"
+        })
+
+        return;
+      }
+
+      if (usersData.find(user => user.login === newLogin)) {
+        response.status(403).json({
+          message: "Another user has already this nickname"
+        })
+
+        return;
+      }
+
       user.login = newLogin
       response.status(202).json({
         user,

@@ -21,8 +21,13 @@ interface IShoppingCartProvider {
 export const useShoppingCartContext = () => React.useContext(ShoppingCartContext);
 
 const ShoppingCartProvider = ({ children }: IShoppingCartProvider) => {
+    const { user } = useStoreContext();
     const [products, setProducts] = useSessionStorage<string[]>('shopping cart', []);
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        products.forEach((product) => (user?.courses.find((item) => item === product) ? null : product));
+    }, [user, products]);
 
     const addProduct = (id: string) => {
         if (products.find((product) => product === id) === undefined) {
