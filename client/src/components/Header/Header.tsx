@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography, IconButton, Box, Avatar, Tooltip, Divider } from '@mui/material';
-import { useStoreContext } from '../../context/StoreProvider';
+import { IUser, useStoreContext } from '../../context/StoreProvider';
 import { AppBar, Toolbar, Search, StyledInputBase, SearchIconWrapper, StyledLink } from './Header.styles';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -24,10 +24,11 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { USER_TYPE } from '../../utils/userTypes';
 import { useShoppingCartContext } from './../../context/ShopingCartProvider';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { IUserForm } from '../UserForm/UserForm';
 
 const links = {
     profile: '/',
-    usersettings: '/',
+    usersettings: '/account-setting',
     courses: '/my-courses',
     shoppingcart: '/',
     wishlist: '/wish-list',
@@ -38,7 +39,7 @@ const Header = () => {
     const { openCart, products } = useShoppingCartContext();
 
     const [openModal, setOpenModal] = React.useState<boolean>(true);
-    const [userFormType, setUserFormType] = React.useState<'register' | 'login' | null>(null);
+    const [userFormType, setUserFormType] = React.useState<IUserForm['type']>(null);
 
     const handleOpenModal = (type: typeof userFormType) => {
         setUserFormType(type);

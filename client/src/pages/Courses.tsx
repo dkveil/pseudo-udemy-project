@@ -35,7 +35,7 @@ const Courses = () => {
             setPage(1);
             navigate(`/courses/1`);
         }
-    }, [params.page, pages]);
+    }, [params.page, pages, navigate]);
 
     return (
         <>

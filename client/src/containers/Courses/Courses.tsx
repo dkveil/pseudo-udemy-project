@@ -30,7 +30,7 @@ const Courses = () => {
                     ))}
                 </Grid>
                 <Link to="/courses" style={{ textDecoration: 'none' }}>
-                    <Button variant="text" endIcon={<KeyboardArrowRightIcon />} sx={{ color: 'black', margin: '1rem 0 1rem auto' }}>
+                    <Button variant="text" endIcon={<KeyboardArrowRightIcon />} sx={{ color: 'black', marginY: 4 }}>
                         More courses
                     </Button>
                 </Link>
