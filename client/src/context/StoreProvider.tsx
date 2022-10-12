@@ -6,11 +6,15 @@ export interface ICourse {
     id: string;
     title: string;
     authors: string[];
+    dateAdded: string;
     description: string;
+    duration: number;
     img: string;
     price: number;
+    promotionPrice: number | null;
     rate: number;
     opinions: number;
+    benefits: string[]
 }
 
 export interface IUser {

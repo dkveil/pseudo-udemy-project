@@ -1,105 +1,146 @@
 const { v4: uuid } = require('uuid');
+const { faker } = require('@faker-js/faker');
 
 const coursesData = [
   {
-    authors: ['author name'],
+    authors: ['Rafał Mobilo'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
-    title: 'course title 1',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    promotionPrice: 42.33,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
+    title: 'Python dla początkujących',
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
+  },
+  {
+    authors: ['Arkadiusz Włodarczyk', 'Rafał Mobilo', 'Paweł Krakowiak', 'Marta Potocka'],
+    id: uuid(),
+    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
+    price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
+    title: 'Python 3 od Podstaw do Eksperta',
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
-    title: 'course title 2',
-    description: 'description',
-    opinions: 200,
-    rate: 5
-  },
-  {
-    authors: ['author name'],
-    id: uuid(),
-    img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
-    price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 3',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 4',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 5',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 6',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 7',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 8',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 9',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
   {
     authors: ['author name'],
     id: uuid(),
     img: 'https://img-b.udemycdn.com/course/480x270/2331806_b90c_2.jpg',
+    dateAdded: faker.date.past(),
     price: 69.99,
+    promotionPrice: null,
+    duration: Math.round((Math.random() * (60 - 12) + 12) * 2) / 2,
     title: 'course title 10',
-    description: 'description',
-    opinions: 200,
-    rate: 5
+    description: 'Watch Over My Shoulder As I Implement A Manual SEO Audit In Real-Time & Show You How To Fix The Most Common SEO Problems',
+    opinions: Math.floor(Math.random() * (2000 - 200) + 200),
+    rate: (Math.random() * (5 - 3) + 3).toFixed(1),
+    benefits: ["Learn how to start your own SEO business from scratch", "Get access to my SEO agencies SEO Audit checklist", "Learn what tools you should use to carry out an SEO Audit"]
   },
 
 ];

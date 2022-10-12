@@ -101,7 +101,7 @@ exports.addUser = (request, response, next) => {
 
 exports.patchUser = (request, response, next) => {
   try {
-    const { login, boughtCourses, totalPrice, action, addedFunds, newLogin, checkedPassword, newPassword } = request.body;
+    const { login, boughtCourses, totalPrice, action, addedFunds, newLogin, checkedPassword, newPassword, courseId } = request.body;
 
     const user = usersData.find(user => user.login === login);
 
@@ -114,6 +114,16 @@ exports.patchUser = (request, response, next) => {
     }
 
     if (action === "buying a course") {
+      boughtCourses.forEach(course => {
+        const hasUserThisCourseOnWishlist = user.wishlist.find(wishlistCourse => wishlistCourse === course)
+
+        if (hasUserThisCourseOnWishlist) {
+          const courseIndex = user.wishlist.findIndex(course => course === hasUserThisCourseOnWishlist)
+          user.wishlist.splice(courseIndex, 1)
+        }
+
+      })
+
       const hasUserEnoughtMoney = user.budget - totalPrice >= 0;
       if (!hasUserEnoughtMoney) {
         response.status(403).json({
@@ -182,6 +192,20 @@ exports.patchUser = (request, response, next) => {
         user,
       });
 
+    }
+
+    if (action === "adding to wishlist") {
+      user.wishlist.push(courseId)
+      response.status(202).json({
+        user,
+      });
+    }
+    if (action === "remove from wishlist") {
+      const courseIndex = user.wishlist.findIndex(course => course === courseId)
+      user.wishlist.splice(courseIndex, 1)
+      response.status(202).json({
+        user,
+      });
     }
 
   } catch (error) {

@@ -26,7 +26,9 @@ const ShoppingCartProvider = ({ children }: IShoppingCartProvider) => {
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        products.forEach((product) => (user?.courses.find((item) => item === product) ? null : product));
+        user?.courses.forEach((course) => {
+            products.filter((product) => product !== course);
+        });
     }, [user, products]);
 
     const addProduct = (id: string) => {

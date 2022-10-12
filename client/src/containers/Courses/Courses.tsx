@@ -3,6 +3,7 @@ import { Container, Grid, Box, Typography, Button } from '@mui/material';
 import { useStoreContext } from '../../context/StoreProvider';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Link } from 'react-router-dom';
+import { sortCoursesArray } from '../../utils/sortCoursesArray';
 
 const Courses = () => {
     const { courses } = useStoreContext();
@@ -13,21 +14,28 @@ const Courses = () => {
                 <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', mb: 4 }}>
                     Check the latest courses
                 </Typography>
-                <Grid container spacing={2}>
-                    {courses.slice(0, 6).map((course) => (
-                        <Grid item xs={12} sm={6} md={4} key={course.id}>
-                            <CourseCard
-                                authors={course.authors}
-                                description={course.description}
-                                id={course.id}
-                                img={course.img}
-                                title={course.title}
-                                price={course.price}
-                                opinions={course.opinions}
-                                rate={course.rate}
-                            />
-                        </Grid>
-                    ))}
+                <Grid container spacing={2} columns={60}>
+                    {sortCoursesArray(courses, 'by date DESC')
+                        .slice(0, 5)
+                        .map((course, index) => (
+                            <Grid item xs={60} sm={20} md={12} key={course.id}>
+                                <CourseCard
+                                    authors={course.authors}
+                                    id={course.id}
+                                    img={course.img}
+                                    dateAdded={course.dateAdded}
+                                    price={course.price}
+                                    promotionPrice={course.promotionPrice}
+                                    duration={course.duration}
+                                    title={course.title}
+                                    description={course.description}
+                                    opinions={course.opinions}
+                                    rate={course.rate}
+                                    benefits={course.benefits}
+                                    lastChildInRow={(index + 1) % 5 === 0 ? true : false}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
                 <Link to="/courses" style={{ textDecoration: 'none' }}>
                     <Button variant="text" endIcon={<KeyboardArrowRightIcon />} sx={{ color: 'black', marginY: 4 }}>

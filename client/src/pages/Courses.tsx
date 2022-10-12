@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import { useStoreContext } from '../context/StoreProvider';
 import { CourseCard } from '../components/CourseCard';
 import { useParams, useNavigate } from 'react-router';
+import { sortCoursesArray } from '../utils/sortCoursesArray';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -17,9 +18,10 @@ const Courses = () => {
     const navigate = useNavigate();
     const [page, setPage] = React.useState<number>(params.page ? Number(params.page) : 1);
     const { courses } = useStoreContext();
-    const firstCourseOnThePage = (page - 1) * 6;
-    const lastCourseOnThePage = page * 6;
-    const pages = Math.ceil(courses.length / 6);
+    const courseCardsPerPage = 15;
+    const firstCourseOnThePage = (page - 1) * courseCardsPerPage;
+    const lastCourseOnThePage = page * courseCardsPerPage;
+    const pages = Math.ceil(courses.length / courseCardsPerPage);
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, page: number) => {
         setPage(page);
@@ -48,23 +50,32 @@ const Courses = () => {
             </Wrapper>
             <section>
                 <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', paddingY: 6, paddingX: 2 }}>
-                    <Grid container spacing={2} sx={{ mb: 6 }}>
-                        {courses.slice(firstCourseOnThePage, lastCourseOnThePage).map((course) => (
-                            <Grid item xs={12} sm={6} md={4} key={course.id}>
-                                <CourseCard
-                                    id={course.id}
-                                    title={course.title}
-                                    authors={course.authors}
-                                    description={course.description}
-                                    img={course.img}
-                                    price={course.price}
-                                    rate={course.rate}
-                                    opinions={course.opinions}
-                                />
-                            </Grid>
-                        ))}
+                    <Grid container spacing={1} sx={{ mb: 6 }} columns={60}>
+                        {sortCoursesArray(courses, 'by date DESC')
+                            .slice(firstCourseOnThePage, lastCourseOnThePage)
+                            .map((course, index) => (
+                                <Grid item xs={60} sm={15} md={12} key={course.id}>
+                                    <CourseCard
+                                        authors={course.authors}
+                                        id={course.id}
+                                        img={course.img}
+                                        dateAdded={course.dateAdded}
+                                        price={course.price}
+                                        promotionPrice={course.promotionPrice}
+                                        duration={course.duration}
+                                        title={course.title}
+                                        description={course.description}
+                                        opinions={course.opinions}
+                                        rate={course.rate}
+                                        benefits={course.benefits}
+                                        lastChildInRow={(index + 1) % 5 === 0 ? true : false}
+                                    />
+                                </Grid>
+                            ))}
                     </Grid>
-                    <Pagination count={pages} page={page} onChange={handlePaginationChange} variant="outlined" shape="rounded" />
+                    {pages > 2 ? (
+                        <Pagination count={pages} page={page} onChange={handlePaginationChange} variant="outlined" shape="rounded" />
+                    ) : null}
                 </Container>
             </section>
         </>

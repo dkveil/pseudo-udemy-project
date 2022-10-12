@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme, Popover } from '@mui/material';
 import { size } from '../utils/media';
 
 export const theme = createTheme({
@@ -27,6 +27,9 @@ export const theme = createTheme({
             large: size.LARGE
         },
         unit: 'px'
+    },
+    components: {
+
     }
 })
 

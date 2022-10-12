@@ -70,14 +70,18 @@ const MyCourses = () => {
                                             return (
                                                 <Grid item xs={12} sm={6} md={4} key={course.id}>
                                                     <CourseCard
-                                                        id={course.id}
-                                                        title={course.title}
                                                         authors={course.authors}
-                                                        description={course.description}
+                                                        id={course.id}
                                                         img={course.img}
+                                                        dateAdded={course.dateAdded}
                                                         price={course.price}
-                                                        rate={course.rate}
+                                                        promotionPrice={course.promotionPrice}
+                                                        duration={course.duration}
+                                                        title={course.title}
+                                                        description={course.description}
                                                         opinions={course.opinions}
+                                                        rate={course.rate}
+                                                        benefits={course.benefits}
                                                     />
                                                 </Grid>
                                             );
