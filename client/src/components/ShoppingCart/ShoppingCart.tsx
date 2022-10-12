@@ -68,9 +68,10 @@ const ShoppingCart = () => {
 
     const totalPrice = products
         .map((product) => {
+            const promotionPrice = courses?.find((currentCourse) => currentCourse.id === product)?.promotionPrice;
             const price = courses?.find((currentCourse) => currentCourse.id === product)?.price;
 
-            return price;
+            return promotionPrice ? promotionPrice : price;
         })
         ?.reduce((price, sum) => {
             if (price && sum) {

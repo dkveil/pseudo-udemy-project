@@ -27,7 +27,8 @@ const CourseCard = ({
     dateAdded,
     benefits,
     lastChildInRow = false,
-}: ICourse & { lastChildInRow?: boolean }) => {
+    withPopover = true,
+}: ICourse & { lastChildInRow?: boolean; withPopover?: boolean }) => {
     const { products, addProduct, removeProduct } = useShoppingCartContext();
     const { user, setUser } = useStoreContext();
     const [popoverIsOpen, setPopoverIsOpen] = React.useState(false);
@@ -212,7 +213,7 @@ const CourseCard = ({
                         </Box>
                     )}
                 </Box>
-                {popoverIsOpen && windowWidth > size.DESKTOP && (
+                {withPopover && popoverIsOpen && windowWidth > size.DESKTOP && (
                     <Paper
                         elevation={8}
                         sx={{
@@ -231,7 +232,7 @@ const CourseCard = ({
                     </Paper>
                 )}
             </Box>
-            {!(windowWidth > size.DESKTOP) && (
+            {withPopover && !(windowWidth > size.DESKTOP) && (
                 <Modal open={popoverIsOpen} handleClose={() => setPopoverIsOpen(false)}>
                     {subcardContent}
                 </Modal>

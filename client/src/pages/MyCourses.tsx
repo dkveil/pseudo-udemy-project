@@ -57,7 +57,7 @@ const MyCourses = () => {
             </Wrapper>
             <section>
                 <Container maxWidth="lg">
-                    <Grid container spacing={2} sx={{ paddingY: 6, paddingX: 2 }}>
+                    <Grid container spacing={2} sx={{ paddingY: 6, paddingX: 2 }} columns={60}>
                         {user && category ? (
                             user[category].length === 0 ? (
                                 <Typography variant="body2">You have no courses here</Typography>
@@ -68,7 +68,7 @@ const MyCourses = () => {
 
                                         if (course) {
                                             return (
-                                                <Grid item xs={12} sm={6} md={4} key={course.id}>
+                                                <Grid item xs={60} sm={15} md={12} key={course.id}>
                                                     <CourseCard
                                                         authors={course.authors}
                                                         id={course.id}
@@ -82,6 +82,7 @@ const MyCourses = () => {
                                                         opinions={course.opinions}
                                                         rate={course.rate}
                                                         benefits={course.benefits}
+                                                        withPopover={false}
                                                     />
                                                 </Grid>
                                             );
