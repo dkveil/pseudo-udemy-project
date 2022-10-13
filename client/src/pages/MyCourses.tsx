@@ -34,8 +34,6 @@ const MyCourses = () => {
         navigate(newValue === 'courses' ? '/my-courses' : '/wish-list');
     };
 
-    console.log(user?.courses);
-
     return (
         <>
             <Wrapper>

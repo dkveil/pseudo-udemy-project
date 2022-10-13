@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Pagination } from '@mui/material';
+import { Box, Typography, Container, Grid, Pagination, Tab } from '@mui/material';
+import { TabList, TabContext } from '@mui/lab';
 import { styled } from '@mui/system';
 import { useStoreContext } from '../context/StoreProvider';
 import { CourseCard } from '../components/CourseCard';
@@ -13,6 +14,21 @@ const Wrapper = styled(Box)`
     width: 100vw;
 `;
 
+const tabsData = [
+    {
+        label: 'Newest',
+        method: 'by date DESC',
+    },
+    {
+        label: 'The most popular',
+        method: 'by popular',
+    },
+    {
+        label: 'Top rated',
+        method: 'by rate',
+    },
+];
+
 const Courses = () => {
     const params = useParams();
     const navigate = useNavigate();
@@ -22,6 +38,7 @@ const Courses = () => {
     const firstCourseOnThePage = (page - 1) * courseCardsPerPage;
     const lastCourseOnThePage = page * courseCardsPerPage;
     const pages = Math.ceil(courses.length / courseCardsPerPage);
+    const [sortMethod, setSortMethod] = React.useState<'by date DESC' | 'by popular' | 'by rate'>('by rate');
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, page: number) => {
         setPage(page);
@@ -39,19 +56,34 @@ const Courses = () => {
         }
     }, [params.page, pages, navigate]);
 
+    const handleChange = (event: React.SyntheticEvent, newValue: typeof sortMethod) => {
+        setSortMethod(newValue);
+    };
+
     return (
         <>
             <Wrapper>
                 <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%' }}>
-                    <Typography variant="h3" component="h1" sx={{ color: 'white', mb: 6 }}>
+                    <Typography variant="h3" component="h1" sx={{ color: 'white', mb: 2 }}>
                         Courses
                     </Typography>
+                    <Box>
+                        <TabContext value={sortMethod}>
+                            <Box>
+                                <TabList textColor="primary" TabIndicatorProps={{ sx: { background: 'white' } }} onChange={handleChange}>
+                                    {tabsData.map((tab) => (
+                                        <Tab sx={{ color: 'white' }} label={tab.label} value={tab.method} />
+                                    ))}
+                                </TabList>
+                            </Box>
+                        </TabContext>
+                    </Box>
                 </Container>
             </Wrapper>
             <section>
                 <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', paddingY: 6, paddingX: 2 }}>
                     <Grid container spacing={1} sx={{ mb: 6 }} columns={60}>
-                        {sortCoursesArray(courses, 'by date DESC')
+                        {sortCoursesArray(courses, sortMethod)
                             .slice(firstCourseOnThePage, lastCourseOnThePage)
                             .map((course, index) => (
                                 <Grid item xs={60} sm={15} md={12} key={course.id}>
