@@ -4,6 +4,7 @@ import Homepage from './pages/Home';
 import Courses from './pages/Courses';
 import MyCourses from './pages/MyCourses';
 import AccountSettings from './pages/AccountSettings';
+import AdminPanel from './pages/AdminPanel';
 
 const View = () =>
     useRoutes([
@@ -13,6 +14,8 @@ const View = () =>
         { path: '/my-courses', element: <MyCourses /> },
         { path: '/wish-list', element: <MyCourses /> },
         { path: '/account-setting', element: <AccountSettings /> },
+        { path: '/admin-panel', element: <AdminPanel /> },
+        { path: '/admin-panel/:managementtype/', element: <AdminPanel /> },
     ]);
 
 const App = () => {

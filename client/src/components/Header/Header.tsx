@@ -32,7 +32,7 @@ const links = {
     courses: '/my-courses',
     shoppingcart: '/',
     wishlist: '/wish-list',
-    adminpanel: '/',
+    adminpanel: '/admin-panel',
 };
 
 const Header = () => {

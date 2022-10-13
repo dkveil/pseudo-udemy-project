@@ -80,7 +80,7 @@ const MyCourses = () => {
                                                         opinions={course.opinions}
                                                         rate={course.rate}
                                                         benefits={course.benefits}
-                                                        withPopover={false}
+                                                        withPopover={category === 'wishlist' ? true : false}
                                                     />
                                                 </Grid>
                                             );

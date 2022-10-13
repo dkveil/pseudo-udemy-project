@@ -14,7 +14,7 @@ const Wrapper = styled(Box)`
     width: 100vw;
 `;
 
-const tabsData = [
+export const tabsData = [
     {
         label: 'Newest',
         method: 'by date DESC',
