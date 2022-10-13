@@ -1,17 +1,17 @@
-import { CourseCard } from '../../components/CourseCard';
+import { CourseCard } from '../../../components/CourseCard';
 import { Container, Grid, Box, Typography, Button } from '@mui/material';
-import { useStoreContext } from '../../context/StoreProvider';
+import { useStoreContext } from '../../../context/StoreProvider';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Link } from 'react-router-dom';
-import { sortCoursesArray } from '../../utils/sortCoursesArray';
+import { sortCoursesArray } from '../../../utils/sortCoursesArray';
 
 const Courses = () => {
     const { courses } = useStoreContext();
 
     return (
-        <Box component="section" sx={{ paddingY: 6 }}>
+        <Box component="section" sx={{ paddingY: 4 }}>
             <Container maxWidth="lg">
-                <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', mb: 4 }}>
+                <Typography component="h2" sx={{ fontWeight: 'bold', mb: 3, fontSize: 28 }}>
                     Check the latest courses
                 </Typography>
                 <Grid container spacing={2} columns={60}>

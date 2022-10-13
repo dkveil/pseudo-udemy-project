@@ -1,6 +1,6 @@
 import { styled } from '@mui/system'
 import { Box, BoxProps } from '@mui/material'
-import { size } from './../../utils/media';
+import { size } from '../../../utils/media';
 
 interface IWrapper extends BoxProps{
     background: string;

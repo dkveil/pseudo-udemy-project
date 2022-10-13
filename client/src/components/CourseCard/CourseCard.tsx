@@ -28,7 +28,8 @@ const CourseCard = ({
     benefits,
     lastChildInRow = false,
     withPopover = true,
-}: ICourse & { lastChildInRow?: boolean; withPopover?: boolean }) => {
+    mostPopularSection = false,
+}: ICourse & { lastChildInRow?: boolean; withPopover?: boolean; mostPopularSection?: boolean }) => {
     const { products, addProduct, removeProduct } = useShoppingCartContext();
     const { user, setUser } = useStoreContext();
     const [popoverIsOpen, setPopoverIsOpen] = React.useState(false);
@@ -59,19 +60,19 @@ const CourseCard = ({
     };
 
     const handleOpenPopoverOnHover = () => {
-        if (windowWidth > size.DESKTOP) {
+        if (windowWidth > size.DESKTOP && !mostPopularSection) {
             setPopoverIsOpen(true);
         }
     };
 
     const handleClosePopoverOnMouseLeave = () => {
-        if (windowWidth > size.DESKTOP) {
+        if (windowWidth > size.DESKTOP && !mostPopularSection) {
             setPopoverIsOpen(false);
         }
     };
 
     const handleOpenPopoverOnClick = () => {
-        if (!(windowWidth > size.DESKTOP)) {
+        if (!(windowWidth > size.DESKTOP) || mostPopularSection) {
             setPopoverIsOpen(true);
         }
     };
@@ -139,15 +140,32 @@ const CourseCard = ({
                 onClick={handleOpenPopoverOnClick}
                 onMouseEnter={handleOpenPopoverOnHover}
                 onMouseLeave={handleClosePopoverOnMouseLeave}
-                sx={{ display: 'block', position: 'relative', paddingBottom: 2, cursor: 'pointer' }}
+                sx={{
+                    display: mostPopularSection && windowWidth > size.DESKTOP ? 'flex' : 'block',
+                    flexDirection: mostPopularSection && windowWidth > size.DESKTOP ? 'row' : 'column',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    padding: mostPopularSection && windowWidth > size.DESKTOP ? 4 : null,
+                    border: mostPopularSection && windowWidth > size.DESKTOP ? '1px solid black' : null,
+                }}
             >
-                <CardMedia component="img" sx={{ height: { xs: 200, md: 140 } }} src={img} alt={title} />
+                <CardMedia
+                    component="img"
+                    sx={{
+                        height: mostPopularSection ? { xs: 200, md: 280 } : { xs: 200, md: 140 },
+                        width: mostPopularSection && windowWidth > size.DESKTOP ? '45%' : '100%',
+                        maxWidth: '100%',
+                        marginRight: mostPopularSection && windowWidth > size.DESKTOP ? 4 : null,
+                    }}
+                    src={img}
+                    alt={title}
+                />
                 <Box paddingX={0} paddingY={1}>
                     <Typography
                         component="h3"
                         sx={{
                             fontWeight: 'bold',
-                            fontSize: { xs: 18, md: 15 },
+                            fontSize: mostPopularSection && windowWidth > size.DESKTOP ? { xs: 18, md: 32 } : { xs: 18, md: 15 },
                             lineHeight: 1.2,
                             mb: 0.2,
                             display: '-webkit-box',
@@ -158,10 +176,15 @@ const CourseCard = ({
                     >
                         {title}
                     </Typography>
+                    {mostPopularSection && (
+                        <Typography sx={{ fontSize: 16, lineHeight: 1.4, width: windowWidth > size.DESKTOP ? 400 : null, marginY: 0.8 }}>
+                            {description}
+                        </Typography>
+                    )}
                     <Typography
                         variant="caption"
                         sx={{
-                            fontSize: 11,
+                            fontSize: mostPopularSection ? 12 : 11,
                             color: '#6a6f73',
                             display: '-webkit-box',
                             WebkitLineClamp: 1,
@@ -169,8 +192,19 @@ const CourseCard = ({
                             overflow: 'hidden',
                         }}
                     >
+                        {mostPopularSection && 'Authors: '}
                         {authors.join(', ')}
                     </Typography>
+                    {mostPopularSection && (
+                        <Box sx={{ display: 'flex', gap: 1, marginY: 0.2 }}>
+                            <Typography sx={{ fontSize: 12, b: { fontWeight: 'bold' }, color: 'gray' }}>
+                                Date added: <b>{convertISODate(dateAdded, 'full date')}</b>
+                            </Typography>
+                            <Typography sx={{ fontSize: 12, color: 'gray', mb: 0.6 }}>
+                                {duration.toString().replace('.', ',')} total hours
+                            </Typography>
+                        </Box>
+                    )}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                         <Typography sx={{ fontSize: 14, fontWeight: 'bold', color: '#B4690E' }}>
                             {rate.toString().replace('.', ',')}
@@ -180,14 +214,15 @@ const CourseCard = ({
                             ({opinions})
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: mostPopularSection ? 1 : null }}>
                         {promotionPrice && (
-                            <Typography sx={{ fontWeight: 'bold', letterSpacing: -0.5 }}>
+                            <Typography sx={{ fontSize: mostPopularSection ? 22 : null, fontWeight: 'bold', letterSpacing: -0.5 }}>
                                 {formatCurrency(promotionPrice, 'EUR')}
                             </Typography>
                         )}
                         <Typography
                             sx={{
+                                fontSize: mostPopularSection ? 22 : null,
                                 fontWeight: promotionPrice ? 'regular' : 'bold',
                                 textDecoration: promotionPrice ? 'line-through' : 'none',
                                 color: promotionPrice ? '#6a6f73' : 'black',
@@ -232,11 +267,11 @@ const CourseCard = ({
                     </Paper>
                 )}
             </Box>
-            {withPopover && !(windowWidth > size.DESKTOP) && (
+            {mostPopularSection || (withPopover && !(windowWidth > size.DESKTOP)) ? (
                 <Modal open={popoverIsOpen} handleClose={() => setPopoverIsOpen(false)}>
                     {subcardContent}
                 </Modal>
-            )}
+            ) : null}
         </>
     );
 };
