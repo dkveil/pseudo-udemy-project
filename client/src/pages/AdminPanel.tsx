@@ -10,6 +10,7 @@ import { sortCoursesArray } from '../utils/sortCoursesArray';
 import { CourseCard } from '../components/CourseCard';
 import AddIcon from '@mui/icons-material/Add';
 import { tabsData } from './Courses';
+import CourseManagementForm, { ICourseManagementForm } from '../components/CourseManagementForm/CourseManagementForm';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -40,6 +41,8 @@ const settingsList: ISetting[] = [
 const AdminPanel = () => {
     const [page, setPage] = React.useState<number>(1);
     const [sortMethod, setSortMethod] = React.useState<'by date DESC' | 'by popular' | 'by rate'>('by rate');
+    const [openModal, setOpenModal] = React.useState<boolean>(false);
+    const [formType, setFormType] = React.useState<ICourseManagementForm['type']>(null);
     const { user, courses } = useStoreContext();
     const location = useLocation();
     const navigate = useNavigate();
@@ -53,15 +56,23 @@ const AdminPanel = () => {
         setPage(page);
     };
 
+    const handleSortMethodChange = (event: React.SyntheticEvent, newValue: typeof sortMethod) => {
+        setSortMethod(newValue);
+    };
+
+    const handleOpenModal = (type: typeof formType) => {
+        setOpenModal(true);
+        setFormType(type);
+    };
+
     React.useEffect(() => {
         if (params.managementtype && params.managementtype !== 'courses' && params.managementtype !== 'users') {
             navigate('/admin-panel');
         }
-    }, [params.managementtype, navigate]);
-
-    const handleSortMethodChange = (event: React.SyntheticEvent, newValue: typeof sortMethod) => {
-        setSortMethod(newValue);
-    };
+        if (user?.accessLevel !== 1) {
+            navigate('/');
+        }
+    }, [params.managementtype, navigate, user]);
 
     const AdminPanelView = () => {
         if (location.pathname === '/admin-panel') {
@@ -86,7 +97,7 @@ const AdminPanel = () => {
                 <>
                     <Grid container spacing={1} sx={{ mb: 6 }} columns={60}>
                         <Grid item xs={60} sm={15} md={12}>
-                            <Card sx={{ height: 280, textAlign: 'center', cursor: 'pointer' }}>
+                            <Card sx={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleOpenModal('add course')}>
                                 <CardContent>
                                     <AddIcon sx={{ fontSize: 160 }} />
                                     <Typography variant="h5">Add new course</Typography>
@@ -177,6 +188,7 @@ const AdminPanel = () => {
                     </Grid>
                 </Container>
             </Box>
+            <CourseManagementForm open={openModal} handleClose={() => setOpenModal(false)} type={formType} height="auto" padding="14rem" />
         </>
     );
 };

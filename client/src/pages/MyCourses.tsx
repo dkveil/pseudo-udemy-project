@@ -27,7 +27,10 @@ const MyCourses = () => {
         if (location.pathname === '/wish-list') {
             setCategory('wishlist');
         }
-    }, [location.pathname]);
+        if (!user) {
+            navigate('/');
+        }
+    }, [location.pathname, user, navigate]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: typeof category) => {
         setCategory(newValue);

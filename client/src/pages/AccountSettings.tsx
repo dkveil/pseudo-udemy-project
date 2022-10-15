@@ -7,6 +7,7 @@ import UserForm, { IUserForm } from './../components/UserForm/UserForm';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import { useStoreContext } from '../context/StoreProvider';
+import { useNavigate } from 'react-router';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -41,6 +42,7 @@ const settingsList: ISetting[] = [
 
 const AccountSettings = () => {
     const { user } = useStoreContext();
+    const navigate = useNavigate();
     const [openModal, setOpenModal] = React.useState<boolean>(false);
     const [userFormType, setUserFormType] = React.useState<IUserForm['type']>(null);
 
@@ -50,6 +52,12 @@ const AccountSettings = () => {
     };
 
     const handleFormType = (type: typeof userFormType) => {};
+
+    React.useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
 
     return (
         <>
