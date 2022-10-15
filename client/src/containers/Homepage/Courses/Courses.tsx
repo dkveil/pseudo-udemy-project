@@ -25,6 +25,7 @@ const Courses = () => {
                                     img={course.img}
                                     dateAdded={course.dateAdded}
                                     price={course.price}
+                                    usePromotionPrice={course.usePromotionPrice}
                                     promotionPrice={course.promotionPrice}
                                     duration={course.duration}
                                     title={course.title}

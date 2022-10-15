@@ -24,6 +24,7 @@ const MostPopular = () => {
                                 img={mostPopularCourse.img}
                                 dateAdded={mostPopularCourse.dateAdded}
                                 price={mostPopularCourse.price}
+                                usePromotionPrice={mostPopularCourse.usePromotionPrice}
                                 promotionPrice={mostPopularCourse.promotionPrice}
                                 duration={mostPopularCourse.duration}
                                 title={mostPopularCourse.title}

@@ -1,4 +1,4 @@
-import { Formik, Field, FieldArray } from 'formik';
+import { Formik } from 'formik';
 import Modal from '../Modal';
 import { ICustomModal } from '../Modal/Modal';
 import { IFormWrapper, FormWrapper } from '../UserForm/UserForm.styles';
@@ -6,6 +6,9 @@ import * as Yup from 'yup';
 import Button from '../Button';
 import { Typography, TextField, Rating, Box, FormControlLabel, Switch } from '@mui/material';
 import { MuiChipsInput } from 'mui-chips-input';
+import axios from 'axios';
+import request from '../../helpers/request';
+import { useStoreContext } from '../../context/StoreProvider';
 
 export type ICourseManagementForm = Omit<ICustomModal, 'children'> & {
     type: 'add course' | null;
@@ -53,7 +56,9 @@ const validationSchema = Yup.object({
     rate: Yup.number().min(0).max(5).required(),
 });
 
-const CourseManagementForm = ({ open, handleClose, width, height, padding }: ICourseManagementForm) => {
+const CourseManagementForm = ({ open, handleClose, width, height, padding, type }: ICourseManagementForm) => {
+    const { setCourses } = useStoreContext();
+
     const initValues = {
         title: '',
         description: '',
@@ -75,8 +80,48 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding }: ICo
                 initialValues={initValues}
                 validateOnChange={false}
                 validateOnBlur={false}
-                onSubmit={(values) => {
-                    alert(JSON.stringify(values));
+                onSubmit={async (values) => {
+                    if (type === 'add course') {
+                        const {
+                            title,
+                            description,
+                            authors,
+                            img,
+                            price,
+                            usePromotionPrice,
+                            promotionPrice,
+                            duration,
+                            benefits,
+                            opinions,
+                            rate,
+                        } = values;
+
+                        try {
+                            const { data, status } = await request.post('/courses', {
+                                title,
+                                authors,
+                                dateAdded: new Date().toISOString(),
+                                description,
+                                duration,
+                                img,
+                                price,
+                                usePromotionPrice: values.usePromotionPrice ? true : false,
+                                promotionPrice: values.promotionPrice === 0 ? 0 : values.promotionPrice,
+                                rate,
+                                benefits,
+                                opinions,
+                            });
+
+                            if (status === 201) {
+                                setCourses(data.courses);
+                                handleClose();
+                            }
+                        } catch (error) {
+                            if (axios.isAxiosError(error)) {
+                                console.log(error);
+                            }
+                        }
+                    }
                 }}
             >
                 {({ handleSubmit, errors, values, handleChange, setFieldValue }) => {
@@ -146,6 +191,10 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding }: ICo
                                 name="price"
                                 value={values.price}
                                 onChange={handleChange}
+                                inputProps={{
+                                    min: 0,
+                                    step: 0.01,
+                                }}
                             />
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
                                 <FormControlLabel
@@ -171,6 +220,10 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding }: ICo
                                     value={values.promotionPrice}
                                     onChange={handleChange}
                                     sx={{ width: '20%' }}
+                                    inputProps={{
+                                        min: 0,
+                                        step: 0.01,
+                                    }}
                                 />
                             </Box>
                             <MuiChipsInput

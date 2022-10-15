@@ -11,10 +11,11 @@ export interface ICourse {
     duration: number;
     img: string;
     price: number;
+    usePromotionPrice: boolean;
     promotionPrice: number | null;
     rate: number;
     opinions: number;
-    benefits: string[]
+    benefits: string[];
 }
 
 export interface IUser {

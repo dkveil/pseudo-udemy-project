@@ -194,8 +194,22 @@ exports.getCourse = (request, response, next) => {
 
 exports.postCourse = (request, response, next) => {
   try {
-    const { authors, img, price, title } = request.body;
-    if (!authors || !price || !title) {
+    const {
+      title,
+      authors,
+      dateAdded,
+      description,
+      duration,
+      img,
+      price,
+      usePromotionPrice,
+      promotionPrice,
+      rate,
+      opinions,
+      benefits
+    } = request.body;
+
+    if (!title || !authors || !dateAdded || !description || !duration || !img || !price || !usePromotionPrice || !promotionPrice || !rate || !opinions || !benefits) {
       response.status(400).json({
         message: 'Not all information was provided',
       });
@@ -213,11 +227,19 @@ exports.postCourse = (request, response, next) => {
     }
 
     const newCourse = {
-      authors: authors,
       id: uuid(),
+      title,
+      description,
+      dateAdded,
+      authors,
       img,
       price,
-      title,
+      usePromotionPrice: usePromotionPrice ? true : false,
+      promotionPrice: promotionPrice === 0 ? 0 : promotionPrice,
+      duration,
+      benefits,
+      opinions,
+      rate
     };
 
     coursesData.push(newCourse);

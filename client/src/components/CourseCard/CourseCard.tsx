@@ -23,6 +23,7 @@ const CourseCard = ({
     title,
     opinions,
     rate,
+    usePromotionPrice,
     promotionPrice,
     dateAdded,
     benefits,
@@ -215,7 +216,7 @@ const CourseCard = ({
                         </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: mostPopularSection ? 1 : null }}>
-                        {promotionPrice && (
+                        {usePromotionPrice && promotionPrice && (
                             <Typography sx={{ fontSize: mostPopularSection ? 22 : null, fontWeight: 'bold', letterSpacing: -0.5 }}>
                                 {formatCurrency(promotionPrice, 'EUR')}
                             </Typography>
