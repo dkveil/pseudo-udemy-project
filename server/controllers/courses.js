@@ -209,7 +209,7 @@ exports.postCourse = (request, response, next) => {
       benefits
     } = request.body;
 
-    if (!title || !authors || !dateAdded || !description || !duration || !img || !price || !usePromotionPrice || !promotionPrice || !rate || !opinions || !benefits) {
+    if (!title || !authors || !dateAdded || !description || !duration || !img || !price || usePromotionPrice === undefined || promotionPrice === undefined || !rate || !opinions || !benefits) {
       response.status(400).json({
         message: 'Not all information was provided',
       });
@@ -234,8 +234,8 @@ exports.postCourse = (request, response, next) => {
       authors,
       img,
       price,
-      usePromotionPrice: usePromotionPrice ? true : false,
-      promotionPrice: promotionPrice === 0 ? 0 : promotionPrice,
+      usePromotionPrice,
+      promotionPrice,
       duration,
       benefits,
       opinions,
