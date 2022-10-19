@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from '@mui/system';
 import { Box, Typography, Container, Grid, Card, CardContent, Pagination, Tab } from '@mui/material';
 import { TabList, TabContext } from '@mui/lab';
-import { useStoreContext } from '../context/StoreProvider';
+import { useStoreContext, ICourse } from '../context/StoreProvider';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -43,6 +43,7 @@ const AdminPanel = () => {
     const [sortMethod, setSortMethod] = React.useState<'by date DESC' | 'by popular' | 'by rate'>('by rate');
     const [openModal, setOpenModal] = React.useState<boolean>(false);
     const [formType, setFormType] = React.useState<ICourseManagementForm['type']>(null);
+    const [editedCourse, setEditedCourse] = React.useState<ICourse | null>(null);
     const { user, courses } = useStoreContext();
     const location = useLocation();
     const navigate = useNavigate();
@@ -60,9 +61,10 @@ const AdminPanel = () => {
         setSortMethod(newValue);
     };
 
-    const handleOpenModal = (type: typeof formType) => {
+    const handleOpenModal = (type: typeof formType, course?: ICourse) => {
         setOpenModal(true);
         setFormType(type);
+        setEditedCourse(course ? course : null);
     };
 
     React.useEffect(() => {
@@ -124,6 +126,7 @@ const AdminPanel = () => {
                                         benefits={course.benefits}
                                         lastChildInRow={(index + 1) % 5 === 0 ? true : false}
                                         withPopover={false}
+                                        onClickHandler={() => handleOpenModal('edit course', course)}
                                     />
                                 </Grid>
                             ))}
@@ -189,7 +192,14 @@ const AdminPanel = () => {
                     </Grid>
                 </Container>
             </Box>
-            <CourseManagementForm open={openModal} handleClose={() => setOpenModal(false)} type={formType} height="auto" padding="14rem" />
+            <CourseManagementForm
+                open={openModal}
+                handleClose={() => setOpenModal(false)}
+                type={formType}
+                height="auto"
+                padding="14rem"
+                editedCourse={editedCourse}
+            />
         </>
     );
 };

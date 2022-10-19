@@ -206,7 +206,7 @@ exports.postCourse = (request, response, next) => {
       promotionPrice,
       rate,
       opinions,
-      benefits
+      benefits,
     } = request.body;
 
     if (!title || !authors || !dateAdded || !description || !duration || !img || !price || usePromotionPrice === undefined || promotionPrice === undefined || !rate || !opinions || !benefits) {
@@ -254,6 +254,63 @@ exports.postCourse = (request, response, next) => {
     });
   }
 };
+
+exports.patchCourse = (request, response, next) => {
+  try {
+    const {
+      title,
+      id,
+      authors,
+      dateAdded,
+      description,
+      duration,
+      img,
+      price,
+      usePromotionPrice,
+      promotionPrice,
+      rate,
+      opinions,
+      benefits } = request.body;
+
+    if (!id || !title || !authors || !dateAdded || !description || !duration || !img || !price || usePromotionPrice === undefined || promotionPrice === undefined || !rate || !opinions || !benefits) {
+      response.status(400).json({
+        message: 'Not all information was provided',
+      });
+
+      return;
+    }
+
+    const course = coursesData.find((course) => course.id === id)
+
+    if (!course) {
+      response.status(404).json({
+        message: 'Course does not exists',
+      });
+    }
+
+    course.title = title;
+    course.authors = authors;
+    course.description = description;
+    course.duration = duration;
+    course.img = img;
+    course.price = price;
+    course.usePromotionPrice = usePromotionPrice;
+    course.promotionPrice = promotionPrice;
+    course.rate = rate;
+    course.opinions = opinions;
+    course.benefits = benefits;
+
+    response.status(202).json({
+      courses: coursesData
+    })
+
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message: 'Something went wrong with the endpoint /courses and method PATCH'
+    })
+  }
+}
 
 exports.putCourse = (request, response, next) => {
   try {

@@ -8,10 +8,11 @@ import { Typography, TextField, Rating, Box, FormControlLabel, Switch } from '@m
 import { MuiChipsInput } from 'mui-chips-input';
 import axios from 'axios';
 import request from '../../helpers/request';
-import { useStoreContext } from '../../context/StoreProvider';
+import { useStoreContext, ICourse } from '../../context/StoreProvider';
 
 export type ICourseManagementForm = Omit<ICustomModal, 'children'> & {
-    type: 'add course' | null;
+    type: 'add course' | 'edit course' | null;
+    editedCourse: ICourse | null;
 } & IFormWrapper;
 
 interface FormModel {
@@ -56,21 +57,21 @@ const validationSchema = Yup.object({
     rate: Yup.number().min(0).max(5).required(),
 });
 
-const CourseManagementForm = ({ open, handleClose, width, height, padding, type }: ICourseManagementForm) => {
+const CourseManagementForm = ({ open, handleClose, width, height, padding, type, editedCourse }: ICourseManagementForm) => {
     const { setCourses } = useStoreContext();
 
     const initValues = {
-        title: '',
-        description: '',
-        authors: [],
-        img: '',
-        price: 0,
-        usePromotionPrice: false,
-        promotionPrice: 0,
-        duration: 0,
-        benefits: [],
-        opinions: 0,
-        rate: 0,
+        title: editedCourse?.title || '',
+        description: editedCourse?.description || '',
+        authors: editedCourse?.authors || [],
+        img: editedCourse?.img || '',
+        price: editedCourse?.price || 0,
+        usePromotionPrice: editedCourse?.usePromotionPrice || false,
+        promotionPrice: editedCourse?.promotionPrice || 0,
+        duration: editedCourse?.duration || 0,
+        benefits: editedCourse?.benefits || [],
+        opinions: editedCourse?.opinions || 0,
+        rate: editedCourse?.rate || 0,
     };
 
     return (
@@ -122,6 +123,46 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding, type 
                             }
                         }
                     }
+                    if (type === 'edit course') {
+                        const {
+                            title,
+                            description,
+                            authors,
+                            img,
+                            price,
+                            usePromotionPrice,
+                            promotionPrice,
+                            duration,
+                            benefits,
+                            opinions,
+                            rate,
+                        } = values;
+
+                        try {
+                            const { data, status } = await request.patch('/courses', {
+                                id: editedCourse?.id,
+                                title,
+                                authors,
+                                dateAdded: editedCourse?.dateAdded,
+                                description,
+                                duration,
+                                img,
+                                price,
+                                usePromotionPrice,
+                                promotionPrice,
+                                rate,
+                                benefits,
+                                opinions,
+                            });
+
+                            if (status === 202) {
+                                setCourses(data.courses);
+                                handleClose();
+                            }
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
                 }}
             >
                 {({ handleSubmit, errors, values, handleChange, setFieldValue }) => {
@@ -133,9 +174,12 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding, type 
                                 sx={{
                                     fontSize: '38px',
                                     mb: 4,
+                                    ':first-letter': {
+                                        textTransform: 'uppercase',
+                                    },
                                 }}
                             >
-                                Add new course
+                                {type === 'add course' ? 'Add new course' : type === 'edit course' && type}
                             </Typography>
 
                             <TextField
@@ -287,7 +331,7 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding, type 
                                 <Rating name="rate" value={values.rate} onChange={handleChange} precision={0.1} sx={{ fontSize: 32 }} />
                             </Box>
                             <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={() => handleSubmit()}>
-                                Add new course
+                                {type === 'add course' ? 'Add new course' : type === 'edit course' && type}
                             </Button>
                         </FormWrapper>
                     );
