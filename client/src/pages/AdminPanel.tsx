@@ -108,7 +108,7 @@ const AdminPanel = () => {
             return (
                 <>
                     {settingsList.map((item) => (
-                        <Grid item key={item.name} xs={60} sm={15} md={12}>
+                        <Grid item key={item.name} xs={60} sm={15} md={15}>
                             <Card sx={{ height: 280, textAlign: 'center', cursor: 'pointer' }} onClick={() => navigate(item.link)}>
                                 <CardContent>
                                     {item.icon}

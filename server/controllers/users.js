@@ -101,7 +101,7 @@ exports.addUser = (request, response, next) => {
 
 exports.patchUser = (request, response, next) => {
   try {
-    const { login, boughtCourses, totalPrice, action, addedFunds, newLogin, checkedPassword, newPassword, courseId } = request.body;
+    const { login, boughtCourses, totalPrice, action, addedFunds, newLogin, checkedPassword, newPassword, courseId, img } = request.body;
 
     const user = usersData.find(user => user.login === login);
 
@@ -200,9 +200,17 @@ exports.patchUser = (request, response, next) => {
         user,
       });
     }
+
     if (action === "remove from wishlist") {
       const courseIndex = user.wishlist.findIndex(course => course === courseId)
       user.wishlist.splice(courseIndex, 1)
+      response.status(202).json({
+        user,
+      });
+    }
+
+    if (action === "changing profile picture") {
+      user.avatar = img
       response.status(202).json({
         user,
       });

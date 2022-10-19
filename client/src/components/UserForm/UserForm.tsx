@@ -7,7 +7,14 @@ import { FormWrapper } from './UserForm.styles';
 import Button from '../Button';
 import request from '../../helpers/request';
 import { useStoreContext } from '../../context/StoreProvider';
-import { loginValidationSchema, registerValidationSchema, addFundsValidationSchema } from './validateSchemas';
+import {
+    loginValidationSchema,
+    registerValidationSchema,
+    addFundsValidationSchema,
+    changeProfilePictureValidationSchema,
+    changeUsernameValidationSchema,
+    changePasswordValidationSchema,
+} from './validateSchemas';
 import { initValues } from './initValues';
 
 export type IUserForm = Omit<ICustomModal, 'children'> & {
@@ -21,6 +28,7 @@ interface FormModel {
     passwordConfirmation?: string;
     funds: number | undefined;
     newPassword?: string;
+    img?: string;
 }
 
 const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
@@ -32,9 +40,9 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
             const validations = {
                 login: loginValidationSchema,
                 register: registerValidationSchema,
-                'change username': null,
-                'change password': null,
-                'change of profile picture': null,
+                'change username': changeUsernameValidationSchema,
+                'change password': changePasswordValidationSchema,
+                'change of profile picture': changeProfilePictureValidationSchema,
                 'add funds': addFundsValidationSchema,
             };
 
@@ -164,6 +172,30 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                     }
                                 });
                         }
+                        if (type === 'change of profile picture') {
+                            const { img } = values;
+                            console.log(img);
+                            console.log(user);
+                            await request
+                                .patch('/users', {
+                                    login: user?.login,
+                                    img,
+                                    action: 'changing profile picture',
+                                })
+                                .then(({ data, status }) => {
+                                    if (status === 202) {
+                                        setUser(data.user);
+                                        handleClose();
+                                        resetForm();
+                                    }
+                                })
+                                .catch((error) => {
+                                    if (error.response) {
+                                        const { message } = error.response.data;
+                                        setValidateMessage(message);
+                                    }
+                                });
+                        }
                     }}
                 >
                     {({ handleSubmit, resetForm, values, handleChange, errors }) => {
@@ -186,7 +218,7 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                                 sx={{
                                                     display: { xs: 'block' },
                                                     position: 'absolute',
-                                                    top: '-20%',
+                                                    top: '-15%',
                                                     color: 'error.main',
                                                     fontWeight: 'bold',
                                                     lineHeight: 1,
@@ -267,7 +299,7 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                             <FormHelperText
                                                 sx={{
                                                     position: 'absolute',
-                                                    top: '-15%',
+                                                    top: '-10%',
                                                     color: 'error.main',
                                                     fontWeight: 'bold',
                                                     lineHeight: 1,
@@ -359,7 +391,7 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                             <FormHelperText
                                                 sx={{
                                                     position: 'absolute',
-                                                    top: '-15%',
+                                                    top: '-35%',
                                                     color: 'error.main',
                                                     fontWeight: 'bold',
                                                     lineHeight: 1,
@@ -408,7 +440,7 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                             <FormHelperText
                                                 sx={{
                                                     position: 'absolute',
-                                                    top: '-15%',
+                                                    top: '-35%',
                                                     color: 'error.main',
                                                     fontWeight: 'bold',
                                                     lineHeight: 1,
@@ -435,6 +467,50 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                 </>
                             );
                         }
+                        if (type === 'change of profile picture') {
+                            return (
+                                <>
+                                    <Typography
+                                        variant="h3"
+                                        component="div"
+                                        sx={{
+                                            fontSize: '38px',
+                                            mb: 4,
+                                        }}
+                                    >
+                                        Change your profile picture
+                                    </Typography>
+                                    <FormWrapper onSubmit={handleSubmit}>
+                                        {validateMessage && (
+                                            <FormHelperText
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '-35%',
+                                                    color: 'error.main',
+                                                    fontWeight: 'bold',
+                                                    lineHeight: 1,
+                                                }}
+                                            >
+                                                {validateMessage}
+                                            </FormHelperText>
+                                        )}
+                                        <TextField
+                                            error={errors.img ? true : false}
+                                            id="img"
+                                            label={errors.img ? errors.img : 'Link to your profile picture'}
+                                            variant="filled"
+                                            color="secondary"
+                                            name="img"
+                                            value={values.img}
+                                            onChange={handleChange}
+                                        />
+                                    </FormWrapper>
+                                    <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={() => handleSubmit()}>
+                                        Change
+                                    </Button>
+                                </>
+                            );
+                        }
                         if (type === 'change password') {
                             return (
                                 <>
@@ -453,7 +529,7 @@ const UserForm = ({ type, open, handleClose, handleFormType }: IUserForm) => {
                                             <FormHelperText
                                                 sx={{
                                                     position: 'absolute',
-                                                    top: '-15%',
+                                                    top: '-10%',
                                                     color: 'error.main',
                                                     fontWeight: 'bold',
                                                     lineHeight: 1,
