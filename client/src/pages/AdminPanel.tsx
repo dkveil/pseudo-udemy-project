@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { Box, Typography, Container, Grid, Card, CardContent, Pagination, Tab } from '@mui/material';
+import { Box, Typography, Container, Grid, Card, CardContent, Pagination, Tab, Alert, AlertTitle, Slide } from '@mui/material';
 import { TabList, TabContext } from '@mui/lab';
 import { useStoreContext, ICourse } from '../context/StoreProvider';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -46,6 +46,9 @@ const AdminPanel = () => {
     const [openModal, setOpenModal] = React.useState<boolean>(false);
     const [formType, setFormType] = React.useState<ICourseManagementForm['type']>(null);
     const [editedCourse, setEditedCourse] = React.useState<ICourse | null>(null);
+    const [openedAlert, setOpenedAlert] = React.useState(false);
+    const [alertStatus, setAlertStatus] = React.useState<'success' | 'error' | undefined>(undefined);
+    const [alertMessage, setAlertMessage] = React.useState<string>();
     const { user, courses, setCourses } = useStoreContext();
     const location = useLocation();
     const navigate = useNavigate();
@@ -69,16 +72,25 @@ const AdminPanel = () => {
         setEditedCourse(course ? course : null);
     };
 
-    const deleteCourse = async (id: string) => {
-        try {
-            const { data, status } = await request.delete(`/courses/${id}`);
+    const handleAlert = (status: typeof alertStatus, message: typeof alertMessage) => {
+        setOpenedAlert(true);
+        setAlertStatus(status);
+        setAlertMessage(message);
+        setTimeout(() => {
+            setOpenedAlert(false);
+        }, 3000);
+    };
 
-            console.log(data);
+    const deleteCourse = async (id: string, title: string) => {
+        try {
+            const { status } = await request.delete(`/courses/${id}`);
+
             if (status === 200) {
                 setCourses(courses.filter(({ id: currentId }) => currentId !== id));
+                handleAlert('success', `The course "${title}" has been deleted`);
             }
         } catch (error) {
-            console.log(error);
+            handleAlert('error', `the course "${title}" could not be deleted`);
         }
     };
 
@@ -96,7 +108,7 @@ const AdminPanel = () => {
             return (
                 <>
                     {settingsList.map((item) => (
-                        <Grid item key={item.name} xs={12} sm={6} md={3}>
+                        <Grid item key={item.name} xs={60} sm={15} md={12}>
                             <Card sx={{ height: 280, textAlign: 'center', cursor: 'pointer' }} onClick={() => navigate(item.link)}>
                                 <CardContent>
                                     {item.icon}
@@ -112,66 +124,64 @@ const AdminPanel = () => {
         if (params.managementtype === 'courses') {
             return (
                 <>
-                    <Grid container spacing={1} sx={{ mb: 6 }} columns={60}>
-                        <Grid item xs={60} sm={15} md={12}>
-                            <Card sx={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleOpenModal('add course')}>
-                                <CardContent>
-                                    <AddIcon sx={{ fontSize: 160 }} />
-                                    <Typography variant="h5">Add new course</Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        {sortCoursesArray(courses, sortMethod)
-                            .slice(firstCourseOnThePage, lastCourseOnThePage)
-                            .map((course, index) => (
-                                <Grid item xs={60} sm={15} md={12} key={course.id} sx={{ position: 'relative', pb: 4 }}>
-                                    <CourseCard
-                                        authors={course.authors}
-                                        id={course.id}
-                                        img={course.img}
-                                        dateAdded={course.dateAdded}
-                                        price={course.price}
-                                        usePromotionPrice={course.usePromotionPrice}
-                                        promotionPrice={course.promotionPrice}
-                                        duration={course.duration}
-                                        title={course.title}
-                                        description={course.description}
-                                        opinions={course.opinions}
-                                        rate={course.rate}
-                                        benefits={course.benefits}
-                                        lastChildInRow={(index + 1) % 5 === 0 ? true : false}
-                                        withPopover={false}
-                                    />
-                                    <Box
-                                        sx={{
-                                            display: 'grid',
-                                            placeItems: 'center',
-                                            position: { md: 'absolute' },
-                                            bottom: 0,
-                                            left: 0,
-                                            width: '100%',
-                                        }}
-                                    >
-                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                                            <Button
-                                                variant="contained"
-                                                sx={{ fontSize: 10, boxShadow: '0 0 2px white' }}
-                                                onClick={() => handleOpenModal('edit course', course)}
-                                            >
-                                                Edit course
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                sx={{ fontSize: 10, boxShadow: '0 0 2px white' }}
-                                                onClick={() => deleteCourse(course.id)}
-                                            >
-                                                Delete course
-                                            </Button>
-                                        </Box>
-                                    </Box>
-                                </Grid>
-                            ))}
+                    <Grid item xs={60} sm={15} md={12}>
+                        <Card sx={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleOpenModal('add course')}>
+                            <CardContent>
+                                <AddIcon sx={{ fontSize: 160 }} />
+                                <Typography variant="h5">Add new course</Typography>
+                            </CardContent>
+                        </Card>
                     </Grid>
+                    {sortCoursesArray(courses, sortMethod)
+                        .slice(firstCourseOnThePage, lastCourseOnThePage)
+                        .map((course, index) => (
+                            <Grid item xs={60} sm={15} md={12} key={course.id} sx={{ position: 'relative', pb: 5, mb: { xs: 3, md: 0 } }}>
+                                <CourseCard
+                                    authors={course.authors}
+                                    id={course.id}
+                                    img={course.img}
+                                    dateAdded={course.dateAdded}
+                                    price={course.price}
+                                    usePromotionPrice={course.usePromotionPrice}
+                                    promotionPrice={course.promotionPrice}
+                                    duration={course.duration}
+                                    title={course.title}
+                                    description={course.description}
+                                    opinions={course.opinions}
+                                    rate={course.rate}
+                                    benefits={course.benefits}
+                                    lastChildInRow={(index + 1) % 5 === 0 ? true : false}
+                                    withPopover={false}
+                                />
+                                <Box
+                                    sx={{
+                                        display: 'grid',
+                                        placeItems: 'center',
+                                        position: { xs: 'absolute' },
+                                        bottom: 0,
+                                        left: 0,
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ fontSize: { xs: 11, md: 10 }, boxShadow: '0 0 2px white' }}
+                                            onClick={() => handleOpenModal('edit course', course)}
+                                        >
+                                            Edit course
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ fontSize: { xs: 11, md: 10 }, boxShadow: '0 0 2px white' }}
+                                            onClick={() => deleteCourse(course.id, course.title)}
+                                        >
+                                            Delete course
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Grid>
+                        ))}
                     {pages > 2 ? (
                         <Pagination count={pages} page={page} onChange={handlePaginationChange} variant="outlined" shape="rounded" />
                     ) : null}
@@ -213,7 +223,7 @@ const AdminPanel = () => {
                                         onChange={handleSortMethodChange}
                                     >
                                         {tabsData.map((tab) => (
-                                            <Tab sx={{ color: 'white' }} label={tab.label} value={tab.method} />
+                                            <Tab sx={{ color: 'white' }} label={tab.label} value={tab.method} key={tab.label} />
                                         ))}
                                     </TabList>
                                 </Box>
@@ -224,7 +234,7 @@ const AdminPanel = () => {
             </Wrapper>
             <Box component="section">
                 <Container maxWidth="lg" sx={{ paddingY: 6 }}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1} sx={{ mb: 6 }} columns={60}>
                         {user?.accessLevel === 1 ? (
                             <>{AdminPanelView()}</>
                         ) : (
@@ -238,9 +248,28 @@ const AdminPanel = () => {
                 handleClose={() => setOpenModal(false)}
                 type={formType}
                 height="auto"
-                padding="14rem"
                 editedCourse={editedCourse}
+                handleAlert={handleAlert}
             />
+            <Slide direction="up" in={openedAlert}>
+                <Alert
+                    severity={alertStatus}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 42,
+                        width: '80%',
+                        left: '10%',
+                        zIndex: 5,
+                        margin: 'auto',
+                        borderRadius: '20px',
+                        boxShadow: '0 2px 2px 2px rgba(0,0,0,0.2)',
+                        border: '1px solid green',
+                    }}
+                >
+                    <AlertTitle>{alertStatus && alertStatus.charAt(0).toUpperCase() + alertStatus.slice(1)}</AlertTitle>
+                    {alertMessage}
+                </Alert>
+            </Slide>
         </>
     );
 };
