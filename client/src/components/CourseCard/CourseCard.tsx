@@ -30,8 +30,7 @@ const CourseCard = ({
     lastChildInRow = false,
     withPopover = true,
     mostPopularSection = false,
-    onClickHandler,
-}: ICourse & { lastChildInRow?: boolean; withPopover?: boolean; mostPopularSection?: boolean; onClickHandler?: () => void }) => {
+}: ICourse & { lastChildInRow?: boolean; withPopover?: boolean; mostPopularSection?: boolean }) => {
     const { products, addProduct, removeProduct } = useShoppingCartContext();
     const { user, setUser } = useStoreContext();
     const [popoverIsOpen, setPopoverIsOpen] = React.useState(false);
@@ -138,7 +137,7 @@ const CourseCard = ({
         <>
             <Box
                 aria-haspopup="true"
-                onClick={onClickHandler ? onClickHandler : handleOpenPopoverOnClick}
+                onClick={handleOpenPopoverOnClick}
                 onMouseEnter={handleOpenPopoverOnHover}
                 onMouseLeave={handleClosePopoverOnMouseLeave}
                 sx={{

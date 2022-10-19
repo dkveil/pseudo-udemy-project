@@ -350,7 +350,6 @@ exports.deleteCourse = (request, response, next) => {
   try {
     const { id } = request.params;
 
-    console.log(id);
     const indexCourseToDelete = coursesData.findIndex(course => course.id === id);
 
     if (indexCourseToDelete === -1) {

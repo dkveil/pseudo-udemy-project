@@ -160,7 +160,9 @@ const CourseManagementForm = ({ open, handleClose, width, height, padding, type,
                                 handleClose();
                             }
                         } catch (error) {
-                            console.log(error);
+                            if (axios.isAxiosError(error)) {
+                                console.log(error);
+                            }
                         }
                     }
                 }}

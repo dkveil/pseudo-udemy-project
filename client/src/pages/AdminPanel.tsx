@@ -11,6 +11,8 @@ import { CourseCard } from '../components/CourseCard';
 import AddIcon from '@mui/icons-material/Add';
 import { tabsData } from './Courses';
 import CourseManagementForm, { ICourseManagementForm } from '../components/CourseManagementForm/CourseManagementForm';
+import Button from '../components/Button';
+import request from '../helpers/request';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -44,7 +46,7 @@ const AdminPanel = () => {
     const [openModal, setOpenModal] = React.useState<boolean>(false);
     const [formType, setFormType] = React.useState<ICourseManagementForm['type']>(null);
     const [editedCourse, setEditedCourse] = React.useState<ICourse | null>(null);
-    const { user, courses } = useStoreContext();
+    const { user, courses, setCourses } = useStoreContext();
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -65,6 +67,19 @@ const AdminPanel = () => {
         setOpenModal(true);
         setFormType(type);
         setEditedCourse(course ? course : null);
+    };
+
+    const deleteCourse = async (id: string) => {
+        try {
+            const { data, status } = await request.delete(`/courses/${id}`);
+
+            console.log(data);
+            if (status === 200) {
+                setCourses(courses.filter(({ id: currentId }) => currentId !== id));
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     React.useEffect(() => {
@@ -109,7 +124,7 @@ const AdminPanel = () => {
                         {sortCoursesArray(courses, sortMethod)
                             .slice(firstCourseOnThePage, lastCourseOnThePage)
                             .map((course, index) => (
-                                <Grid item xs={60} sm={15} md={12} key={course.id} sx={{ position: 'relative' }}>
+                                <Grid item xs={60} sm={15} md={12} key={course.id} sx={{ position: 'relative', pb: 4 }}>
                                     <CourseCard
                                         authors={course.authors}
                                         id={course.id}
@@ -126,8 +141,34 @@ const AdminPanel = () => {
                                         benefits={course.benefits}
                                         lastChildInRow={(index + 1) % 5 === 0 ? true : false}
                                         withPopover={false}
-                                        onClickHandler={() => handleOpenModal('edit course', course)}
                                     />
+                                    <Box
+                                        sx={{
+                                            display: 'grid',
+                                            placeItems: 'center',
+                                            position: { md: 'absolute' },
+                                            bottom: 0,
+                                            left: 0,
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                                            <Button
+                                                variant="contained"
+                                                sx={{ fontSize: 10, boxShadow: '0 0 2px white' }}
+                                                onClick={() => handleOpenModal('edit course', course)}
+                                            >
+                                                Edit course
+                                            </Button>
+                                            <Button
+                                                variant="contained"
+                                                sx={{ fontSize: 10, boxShadow: '0 0 2px white' }}
+                                                onClick={() => deleteCourse(course.id)}
+                                            >
+                                                Delete course
+                                            </Button>
+                                        </Box>
+                                    </Box>
                                 </Grid>
                             ))}
                     </Grid>
