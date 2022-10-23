@@ -29,6 +29,8 @@ export interface IUser {
     avatar: string;
 }
 
+/* #TODO: have to change types of set states */
+
 interface IStoreContext {
     user: IUser | null;
     courses: ICourse[];
