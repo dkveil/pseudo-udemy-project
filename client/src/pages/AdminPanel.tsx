@@ -113,6 +113,53 @@ const AdminPanel = () => {
         }
     };
 
+    const giveOrRemoveAdmin = async (editedUser: IUser) => {
+        try {
+            const { status } = await request.patch(`/users/${editedUser.id}`, {
+                action: 'give or remove admin',
+            });
+
+            if (status === 200) {
+                const newArrayUsers =
+                    users?.map((currentUser) => {
+                        if (currentUser.id === editedUser.id) {
+                            return { ...currentUser, accessLevel: currentUser.accessLevel === 1 ? 0 : 1 };
+                        } else {
+                            return currentUser;
+                        }
+                    }) || null;
+                setUsers(newArrayUsers);
+            }
+        } catch (error) {
+            handleAlert('error', 'Something went wrong');
+        }
+    };
+
+    const banOrUnbanUser = async (editedUser: IUser) => {
+        if (editedUser.accessLevel === USER_TYPE.ADMIN) {
+            handleAlert('error', `You can't ban the Administrator`);
+        }
+        try {
+            const { status } = await request.patch(`/users/${editedUser.id}`, {
+                action: 'ban or unban',
+            });
+
+            if (status === 200) {
+                const newArrayUsers =
+                    users?.map((currentUser) => {
+                        if (currentUser.id === editedUser.id) {
+                            return { ...currentUser, banned: !currentUser.banned };
+                        } else {
+                            return currentUser;
+                        }
+                    }) || null;
+                setUsers(newArrayUsers);
+            }
+        } catch (error) {
+            handleAlert('error', 'Something went wrong');
+        }
+    };
+
     React.useEffect(() => {
         if (params.managementtype && params.managementtype !== 'courses' && params.managementtype !== 'users') {
             navigate('/admin-panel');
@@ -279,22 +326,45 @@ const AdminPanel = () => {
                                         )}
                                     </Box>
                                     <Box sx={{ textAlign: 'center', margin: 2 }}>
-                                        <Typography>{user.login.charAt(0).toUpperCase() + user.login.slice(1)}</Typography>
+                                        <Typography sx={{ color: user.banned ? 'red' : 'black' }}>
+                                            {user.login.charAt(0).toUpperCase() + user.login.slice(1)}
+                                            {user.banned && ': BANNED'}
+                                        </Typography>
                                         <Typography sx={{ color: 'gray', fontSize: 10 }}>
                                             {returnUserRank(user.accessLevel).toUpperCase()}
                                         </Typography>
                                     </Box>
                                     <Box sx={{ display: 'flex', gap: 1 }}>
-                                        <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-end' }}>
-                                            <Button variant="contained" sx={{ fontSize: 12, whiteSpace: 'nowrap' }}>
-                                                Ban
+                                        {user.banned ? (
+                                            <Button
+                                                variant="contained"
+                                                sx={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                                                onClick={() => banOrUnbanUser(user)}
+                                            >
+                                                {user.banned ? 'UNBAN' : 'BAN'}
                                             </Button>
-                                        </Box>
-                                        <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-start' }}>
-                                            <Button variant="contained" sx={{ fontSize: 12, whiteSpace: 'nowrap' }}>
-                                                Give admin
-                                            </Button>
-                                        </Box>
+                                        ) : (
+                                            <>
+                                                <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-end' }}>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                                                        onClick={() => banOrUnbanUser(user)}
+                                                    >
+                                                        {user.banned ? 'UNBAN' : 'BAN'}
+                                                    </Button>
+                                                </Box>
+                                                <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-start' }}>
+                                                    <Button
+                                                        variant="contained"
+                                                        sx={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                                                        onClick={() => giveOrRemoveAdmin(user)}
+                                                    >
+                                                        {user.accessLevel === USER_TYPE.ADMIN ? 'Remove admin' : 'Give admin'}
+                                                    </Button>
+                                                </Box>
+                                            </>
+                                        )}
                                     </Box>
                                 </Card>
                             </Grid>

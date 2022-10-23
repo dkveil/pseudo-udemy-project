@@ -27,15 +27,14 @@ export interface IUser {
     login: string;
     password: string;
     avatar: string;
+    banned: boolean;
 }
-
-/* #TODO: have to change types of set states */
 
 interface IStoreContext {
     user: IUser | null;
     courses: ICourse[];
-    setCourses: any;
-    setUser: any;
+    setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
+    setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 const StoreContext = React.createContext({} as IStoreContext);
@@ -47,7 +46,7 @@ interface IStoreProvider {
 }
 
 const StoreProvider = ({ children }: IStoreProvider) => {
-    const [courses, setCourses] = React.useState([]);
+    const [courses, setCourses] = React.useState<ICourse[]>([]);
     const [user, setUser] = useLocalStorage<IUser | null>('user', null);
 
     const fetchData = async () => {
@@ -57,8 +56,24 @@ const StoreProvider = ({ children }: IStoreProvider) => {
     };
 
     React.useEffect(() => {
+        const getUser = async () => {
+            try {
+                const { status } = await request.get(`/users/${user?.id}`);
+
+                if (status !== 200) {
+                    setUser(null);
+                }
+            } catch (error) {
+                setUser(null);
+            }
+        };
+
         fetchData();
-    }, []);
+
+        if (user) {
+            getUser();
+        }
+    }, [user, setUser]);
 
     return (
         <StoreContext.Provider

@@ -96,7 +96,7 @@ const ShoppingCart = () => {
                         </Typography>
                         <Box sx={{ overflowY: 'scroll', height: '420px', overflowX: 'hidden', direction: 'ltr' }}>
                             {products.map((product) => {
-                                const course = courses.find((currentCourse) => currentCourse.id === product);
+                                const course = courses?.find((currentCourse) => currentCourse.id === product);
 
                                 if (course) {
                                     return (

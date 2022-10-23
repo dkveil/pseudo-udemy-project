@@ -13,7 +13,7 @@ const usersData = [
     login: 'user',
     password: '123456',
     avatar: null,
-    banned: false
+    banned: true
   },
   {
     id: uuid(),
@@ -37,6 +37,14 @@ exports.postUser = (request, response, next) => {
       response.status(404).json({
         message: 'User does not exist',
       });
+
+      return;
+    }
+
+    if (user.banned) {
+      response.status(401).json({
+        message: 'Your account has been banned'
+      })
 
       return;
     }
@@ -243,4 +251,78 @@ exports.getUsers = (request, response, next) => {
     });
   }
 
+}
+
+exports.getUser = (request, response, next) => {
+  try {
+    const { id } = request.params;
+
+    const user = usersData.find(user => user.id === id)
+
+    if (!user) {
+      response.status(404).json({
+        message: 'No user with the given id was found',
+      });
+
+      return;
+    }
+
+    if (user.banned) {
+      response.status(401).json({
+        message: 'Your account has been banned'
+      })
+
+      return
+    }
+
+    response.status(200).json({
+      message: 'Is okey'
+    })
+
+  } catch (error) {
+
+  }
+}
+
+exports.patchUserById = (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const { action } = request.body
+
+    const user = usersData.find(user => user.id === id)
+
+    if (!user) {
+      response.status(404).json({
+        message: 'No user with the given id was found',
+      });
+
+      return;
+    }
+
+    if (action === "give or remove admin") {
+      user.accessLevel === 1 ? (
+        user.accessLevel = 0
+      ) : (
+        user.accessLevel = 1
+      )
+
+      response.status(200).json({
+        message: 'done'
+      })
+    }
+
+    if (action == "ban or unban") {
+      user.banned = !user.banned;
+
+      response.status(200).json({
+        message: 'done'
+      })
+    }
+
+  } catch (error) {
+    response.status(500).json({
+      error,
+      message: 'Something went wrong with the endpoint /users/:id and method PATCH',
+    })
+  }
 }

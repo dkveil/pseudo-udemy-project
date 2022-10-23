@@ -37,7 +37,7 @@ const Courses = () => {
     const courseCardsPerPage = 15;
     const firstCourseOnThePage = (page - 1) * courseCardsPerPage;
     const lastCourseOnThePage = page * courseCardsPerPage;
-    const pages = Math.ceil(courses.length / courseCardsPerPage);
+    const pages = Math.ceil(courses?.length / courseCardsPerPage);
     const [sortMethod, setSortMethod] = React.useState<'by date DESC' | 'by popular' | 'by rate'>('by rate');
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, page: number) => {
