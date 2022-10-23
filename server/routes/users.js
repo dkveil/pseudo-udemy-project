@@ -1,7 +1,8 @@
 const express = require('express');
-const { patchUser, postUser, addUser } = require('../controllers/users');
+const { patchUser, postUser, addUser, getUsers } = require('../controllers/users');
 
 const router = express.Router();
+router.get('/', getUsers)
 
 router.post('/', postUser);
 router.put('/', addUser)

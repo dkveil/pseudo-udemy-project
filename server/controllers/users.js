@@ -1,7 +1,9 @@
+const { v4: uuid } = require('uuid');
 const { coursesData } = require('./courses');
 
 const usersData = [
   {
+    id: uuid(),
     accessLevel: 0,
     budget: 150,
     courses: [
@@ -11,15 +13,18 @@ const usersData = [
     login: 'user',
     password: '123456',
     avatar: null,
+    banned: false
   },
   {
+    id: uuid(),
     accessLevel: 1,
     budget: 1000000,
     courses: [],
     wishlist: [],
     login: 'admin',
     password: '******',
-    avatar: null
+    avatar: null,
+    banned: false
   }
 ];
 
@@ -77,6 +82,7 @@ exports.addUser = (request, response, next) => {
     }
 
     const newUser = {
+      id: uuid(),
       accessLevel: 0,
       budget: 150,
       courses: [],
@@ -223,3 +229,18 @@ exports.patchUser = (request, response, next) => {
     });
   }
 };
+
+exports.getUsers = (request, response, next) => {
+  try {
+    response.status(200).json({
+      users: usersData
+    })
+  }
+  catch (error) {
+    response.status(500).json({
+      error,
+      message: 'Something went wrong with the endpoint /users and method GET',
+    });
+  }
+
+}

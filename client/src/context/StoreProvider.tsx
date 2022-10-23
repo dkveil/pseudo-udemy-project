@@ -19,6 +19,7 @@ export interface ICourse {
 }
 
 export interface IUser {
+    id: string;
     accessLevel: number;
     budget: number;
     courses: string[];

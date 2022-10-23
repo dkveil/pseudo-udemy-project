@@ -1,8 +1,23 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { Box, Typography, Container, Grid, Card, CardContent, Pagination, Tab, Alert, AlertTitle, Slide } from '@mui/material';
+import { USER_TYPE } from '../utils/userTypes';
+import {
+    Box,
+    Typography,
+    Container,
+    Grid,
+    Card,
+    CardContent,
+    Pagination,
+    Tab,
+    Alert,
+    AlertTitle,
+    Slide,
+    CircularProgress,
+    Avatar,
+} from '@mui/material';
 import { TabList, TabContext } from '@mui/lab';
-import { useStoreContext, ICourse } from '../context/StoreProvider';
+import { useStoreContext, ICourse, IUser } from '../context/StoreProvider';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -13,6 +28,7 @@ import { tabsData } from './Courses';
 import CourseManagementForm, { ICourseManagementForm } from '../components/CourseManagementForm/CourseManagementForm';
 import Button from '../components/Button';
 import request from '../helpers/request';
+import { returnUserRank } from '../utils/returnUserRank';
 
 const Wrapper = styled(Box)`
     margin-top: 75px;
@@ -57,6 +73,9 @@ const AdminPanel = () => {
     const firstCourseOnThePage = (page - 1) * courseCardsPerPage;
     const lastCourseOnThePage = page * courseCardsPerPage;
     const pages = Math.ceil(courses.length / courseCardsPerPage);
+    const [users, setUsers] = React.useState<IUser[] | null>(null);
+    const [usersLoading, setUsersLoading] = React.useState(false);
+    const [usersError, setUsersError] = React.useState<boolean>(false);
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, page: number) => {
         setPage(page);
@@ -98,10 +117,49 @@ const AdminPanel = () => {
         if (params.managementtype && params.managementtype !== 'courses' && params.managementtype !== 'users') {
             navigate('/admin-panel');
         }
-        if (user?.accessLevel !== 1) {
+        if (user?.accessLevel !== USER_TYPE.ADMIN) {
             navigate('/');
         }
     }, [params.managementtype, navigate, user]);
+
+    React.useEffect(() => {
+        const getUsers = async () => {
+            try {
+                const { data, status } = await request.get('/users');
+
+                if (status === 200) {
+                    setUsers(data.users);
+                    setUsersLoading(false);
+                    setUsersError(false);
+                    setOpenedAlert(true);
+                    setAlertStatus('success');
+                    setAlertMessage(`Users have been loaded correctly`);
+                    setTimeout(() => {
+                        setOpenedAlert(false);
+                    }, 3000);
+
+                    return;
+                }
+
+                throw new Error();
+            } catch (error) {
+                setUsersLoading(false);
+                setUsersError(true);
+                setOpenedAlert(true);
+                setAlertStatus('error');
+                setAlertMessage(`Something went wrong while loading users data`);
+                setTimeout(() => {
+                    setOpenedAlert(false);
+                }, 3000);
+            }
+        };
+
+        if (params.managementtype === 'users') {
+            setUsersLoading(true);
+            setTimeout(getUsers, 1000);
+        }
+        return () => setUsers(null);
+    }, [params.managementtype]);
 
     const AdminPanelView = () => {
         if (location.pathname === '/admin-panel') {
@@ -192,11 +250,60 @@ const AdminPanel = () => {
         if (params.managementtype === 'users') {
             return (
                 <>
-                    <div>
-                        <div>
-                            <div>users</div>
-                        </div>
-                    </div>
+                    {usersLoading && (
+                        <Grid item xs={60}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+                                <CircularProgress />
+                            </Box>
+                        </Grid>
+                    )}
+                    {!usersLoading &&
+                        users?.map((user) => (
+                            <Grid item xs={60} sm={15} md={15} key={user.id}>
+                                <Card
+                                    sx={{
+                                        height: 280,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Box>
+                                        {user.avatar ? (
+                                            <Avatar alt="Remy Sharp" src={user.avatar} sx={{ height: 120, width: 120 }} />
+                                        ) : (
+                                            <Avatar sx={{ bgcolor: 'black', height: 120, width: 120, fontSize: 40 }}>
+                                                {user.login.charAt(0).toUpperCase()}
+                                            </Avatar>
+                                        )}
+                                    </Box>
+                                    <Box sx={{ textAlign: 'center', margin: 2 }}>
+                                        <Typography>{user.login.charAt(0).toUpperCase() + user.login.slice(1)}</Typography>
+                                        <Typography sx={{ color: 'gray', fontSize: 10 }}>
+                                            {returnUserRank(user.accessLevel).toUpperCase()}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                        <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Button variant="contained" sx={{ fontSize: 12, whiteSpace: 'nowrap' }}>
+                                                Ban
+                                            </Button>
+                                        </Box>
+                                        <Box sx={{ width: '50%', display: 'flex', justifyContent: 'flex-start' }}>
+                                            <Button variant="contained" sx={{ fontSize: 12, whiteSpace: 'nowrap' }}>
+                                                Give admin
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                </Card>
+                            </Grid>
+                        ))}
+                    {!usersLoading && usersError && (
+                        <Grid item xs={60} sm={15} md={15}>
+                            <Typography sx={{ color: 'black', fontSize: 40 }}>Error</Typography>
+                        </Grid>
+                    )}
                 </>
             );
         }
